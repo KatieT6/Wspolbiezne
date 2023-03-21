@@ -2,6 +2,11 @@
 {
     public class Kalkulator
     {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("HI!");
+        }
+        
         public static int Dodawanie(int a, int b)
         {
             return a + b;
