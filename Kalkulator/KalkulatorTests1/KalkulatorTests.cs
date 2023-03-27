@@ -1,80 +1,42 @@
-﻿using System;
+﻿using Kalkulator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Kalkulator.KalkulatorTests
+namespace Kalkulator.Tests
 {
+    [TestClass()]
     public class KalkulatorTests
     {
-        public static void TestAdd()
+        [TestMethod()]
+        public void DodawanieTest()
         {
-            int result = Kalkulator.Dodawanie(2, 3);
-            if (result != 5)
-            {
-                Console.WriteLine("Add test failed. Expected 5, but got " + result);
-            }
-            else
-            {
-                Console.WriteLine("Add test passed.");
-            }
+            Assert.AreEqual(Kalkulator.Dodawanie(3, 2), 5);
+            Assert.AreNotEqual(Kalkulator.Dodawanie(3, 3), 5);
         }
 
-        public static void TestSubtract()
+        [TestMethod()]
+        public void OdejmowanieTest()
         {
-            int result = Kalkulator.Odejmowanie(5, 2);
-            if (result != 3)
-            {
-                Console.WriteLine("Subtract test failed. Expected 3, but got " + result);
-            }
-            else
-            {
-                Console.WriteLine("Subtract test passed.");
-            }
+            Assert.AreEqual(Kalkulator.Odejmowanie(3, 2), 1);
+            Assert.AreNotEqual(Kalkulator.Odejmowanie(3, 3), 5);
         }
 
-        public static void TestMultiply()
+        [TestMethod()]
+        public void MnozenieTest()
         {
-            int result = Kalkulator.Mnozenie(2, 3);
-            if (result != 6)
-            {
-                Console.WriteLine("Multiply test failed. Expected 6, but got " + result);
-            }
-            else
-            {
-                Console.WriteLine("Multiply test passed.");
-            }
+            Assert.AreEqual(Kalkulator.Mnozenie(3, 2), 6);
+            Assert.AreNotEqual(Kalkulator.Mnozenie(3, 3), 4);
         }
 
-        public static void TestDivide()
+        [TestMethod()]
+        public void DzielenieTest()
         {
-            int result = Kalkulator.Dzielenie(10, 2);
-            if (result != 5)
-            {
-                Console.WriteLine("Divide test failed. Expected 5, but got " + result);
-            }
-            else
-            {
-                Console.WriteLine("Divide test passed.");
-            }
-        }
-
-        public static void TestDivideByZero()
-        {
-            try
-            {
-                Kalkulator.Dzielenie(10, 0);
-                Console.WriteLine("Divide by zero test failed. Expected ArgumentException, but no exception was thrown.");
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine("Divide by zero test passed. Expected exception was thrown: " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Divide by zero test failed. Unexpected exception was thrown: " + ex.Message);
-            }
+            Assert.AreEqual(Kalkulator.Dzielenie(6, 2), 3);
+            Assert.AreNotEqual(Kalkulator.Dzielenie(3, 3), 2);
         }
     }
 }
