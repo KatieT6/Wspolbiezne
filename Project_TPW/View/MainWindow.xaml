@@ -37,9 +37,9 @@
             </ItemsControl>
         </Border>
 
-        <TextBox Margin="62,65,-8,351" TextWrapping="Wrap" Text="{Binding OrbQuantity, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Width="NaN"/>
-        <Button Content="START" Margin="38,99,-32,310" Grid.Column="1" Command="{Binding EnableSignal}" IsEnabled="{Binding IsEnabled}" Click="Button_Click" Background="#FF46A085" Foreground="#FFFFF5F5" FontFamily="Lucida Console" Width="NaN"/>
-        <Button Content="STOP" Margin="38,134,-32,0" VerticalAlignment="Top" Height="25" Command="{Binding DisableSignal}" Grid.Column="1" IsEnabled="{Binding IsDisabled, Mode=OneWay}" Click="Button_Click_1" FontFamily="Lucida Console" Background="#FFDF7C5F" Foreground="#FFFFF5F5" Width="NaN"/>
+        <TextBox Margin="74,65,-20,351" TextWrapping="Wrap" Text="{Binding BallsQuantity, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Width="NaN"/>
+        <Button Content="START" Margin="50,104,-44,305" Grid.Column="1" Command="{Binding EnableSignal}" IsEnabled="{Binding IsEnabled}" Click="Button_Click" Background="#FF46A085" Foreground="#FFFFF5F5" FontFamily="Lucida Console" Width="NaN"/>
+        <Button Content="STOP" Margin="50,144,-44,0" VerticalAlignment="Top" Height="25" Command="{Binding DisableSignal}" Grid.Column="1" IsEnabled="{Binding IsDisabled, Mode=OneWay}" Click="Button_Click_1" FontFamily="Lucida Console" Background="#FFDF7C5F" Foreground="#FFFFF5F5" Width="NaN"/>
 
 
     </Grid>

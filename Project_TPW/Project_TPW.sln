@@ -8,6 +8,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationModel", "PresentationModel\PresentationModel.csproj", "{5CBFE4E2-906A-4717-97DB-5847F31BF2E1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationViewModel", "PresentationViewModel\PresentationViewModel.csproj", "{DC11A464-8BF6-40F0-8465-D9A861C54A81}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5CBFE4E2-906A-4717-97DB-5847F31BF2E1} = {5CBFE4E2-906A-4717-97DB-5847F31BF2E1}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{30A915D9-7B48-4180-B9BD-994611541944}"
 EndProject
@@ -16,10 +19,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logic", "Logic", "{BD43608F-C714-4D8D-9F0B-41AF4093C43F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "Logic\Logic.csproj", "{BAAF2D7B-B928-4E44-80D1-04F2B13911E3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CF2A45E5-8320-4B64-9A08-F47712CC8BD9} = {CF2A45E5-8320-4B64-9A08-F47712CC8BD9}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{CF2A45E5-8320-4B64-9A08-F47712CC8BD9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationView", "View\PresentationView.csproj", "{7C2A213F-6525-46BD-875D-222700A893C1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DC11A464-8BF6-40F0-8465-D9A861C54A81} = {DC11A464-8BF6-40F0-8465-D9A861C54A81}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
