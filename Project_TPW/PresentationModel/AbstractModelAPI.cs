@@ -1,5 +1,9 @@
 ﻿namespace PresentationModel
 {
+    public class ChanedEventBallArgs : EventArgs
+    {
+        public InterfaceBall Ball { get; internal set; }
+    }
 
     public abstract class AbstractModelAPI : IObservable<InterfaceBall>
     {

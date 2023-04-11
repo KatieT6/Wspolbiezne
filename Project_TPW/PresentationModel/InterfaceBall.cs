@@ -5,8 +5,8 @@ namespace PresentationModel
 {
     public interface InterfaceBall : INotifyPropertyChanged
     {
-        double Xaxis { get; }
-        double Yaxis { get; }
-        double Radious { get; }
+        double X { get; }
+        double Y { get; }
+        double Radius { get; }
     }
 }

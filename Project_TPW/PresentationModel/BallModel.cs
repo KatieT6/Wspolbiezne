@@ -14,6 +14,8 @@ namespace PresentationModel
         private double y;
         private double radius;
 
+        private Random random;
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public BallModel(double xvalue, double yvalue)
@@ -23,42 +25,43 @@ namespace PresentationModel
             //MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
         }
 
-        public double Xaxis 
+        public double X 
         {
             get { return x; }
             private set
             {
+                if (x == value)
+                {
+                    return;
+                }
                 x = value;
-                //OnPropertyChanged("X");
+                OnPropertyChanged();
+                
             }
         }
 
-        public double Yaxis
+        public double Y
         {
             get { return y; }
             private set
             {
+                if (y == value)
+                {
+                    return;
+                }
                 y = value;
-                //OnPropertyChanged("X");
+                OnPropertyChanged();
             }
         }
 
-        public double Radious
-        {
-            get { return radius; }
-            private set
-            {
-                radius = value;
-                //OnPropertyChanged("X");
-            }
-        }
+        public double Radius { get; internal set; }
 
         public void Dispose()
         {
             throw new NotImplementedException();
         }
 
-        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

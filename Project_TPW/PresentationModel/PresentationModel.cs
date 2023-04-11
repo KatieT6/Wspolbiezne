@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Logic;
@@ -9,8 +11,13 @@ namespace PresentationModel
 {
     internal class PresentationModel : AbstractModelAPI
     {
+
+        private IObservable<EventPattern<ChanedEventBallArgs>> eventObservable = null;
+
+        public event EventHandler<ChanedEventBallArgs> BallChanged;
         public PresentationModel()
         {
+            eventObservable = Observable.FromEventPattern<ChanedEventBallArgs>(this, "Ball has changed");
         }
 
 /*        tu jeszcze trzeba przemyśleć/dopracować
