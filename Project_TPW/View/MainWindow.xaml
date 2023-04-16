@@ -16,7 +16,7 @@
         </Grid.ColumnDefinitions>
 
 
-        <Border BorderBrush="#FF0C100E" BorderThickness="5,5,5,5" HorizontalAlignment="Left" Height="295" Margin="90,65,0,0" VerticalAlignment="Top" Width="465">
+        <Border BorderBrush="#FF0C100E" BorderThickness="5,5,5,5" HorizontalAlignment="Left" Height="300" Margin="70,65,0,0" VerticalAlignment="Top" Width="480">
             <ItemsControl ItemsSource="{Binding Balls}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

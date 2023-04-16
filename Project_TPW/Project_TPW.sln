@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project_TPW", "Project_TPW\Project_TPW.csproj", "{4C9F524E-650D-40ED-BBE3-0DBE6934E40D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationModel", "PresentationModel\PresentationModel.csproj", "{5CBFE4E2-906A-4717-97DB-5847F31BF2E1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationViewModel", "PresentationViewModel\PresentationViewModel.csproj", "{DC11A464-8BF6-40F0-8465-D9A861C54A81}"
@@ -36,10 +34,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4C9F524E-650D-40ED-BBE3-0DBE6934E40D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C9F524E-650D-40ED-BBE3-0DBE6934E40D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C9F524E-650D-40ED-BBE3-0DBE6934E40D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C9F524E-650D-40ED-BBE3-0DBE6934E40D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5CBFE4E2-906A-4717-97DB-5847F31BF2E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5CBFE4E2-906A-4717-97DB-5847F31BF2E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CBFE4E2-906A-4717-97DB-5847F31BF2E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
