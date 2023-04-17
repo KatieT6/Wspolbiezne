@@ -9,31 +9,28 @@ using Logic;
 
 namespace PresentationModel
 {
-    internal class PresentationModel : AbstractModelAPI
+    internal class Model : AbstractModelAPI
     {
 
-        private IObservable<EventPattern<ChanedEventBallArgs>> eventObservable = null;
+        private readonly IObservable<EventPattern<ChanedEventBallArgs>> eventObservable = null;
+        private readonly AbstractLogicAPI logicAPI;
+        private IDisposable subscriber;
 
         public event EventHandler<ChanedEventBallArgs> BallChanged;
-        public PresentationModel()
+
+        public Model()
         {
             eventObservable = Observable.FromEventPattern<ChanedEventBallArgs>(this, "Ball has changed");
         }
 
-/*        tu jeszcze trzeba przemyśleć/dopracować
- *        private AbstractLogicAPI logicAPI = */
+        
 
         public override void CreateScene(int quantity, int radious)
         {
             throw new NotImplementedException();
         }
 
-        public override void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Start()
+        public override void Enable()
         {
             throw new NotImplementedException();
         }
@@ -42,5 +39,10 @@ namespace PresentationModel
         {
             throw new NotImplementedException();
         }
+
+        public override void Dispose()
+        {
+            foreach (ModelBall item in Balls2Dispose)
+                item.Dispose()        }
     }
 }

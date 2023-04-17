@@ -14,16 +14,11 @@ namespace PresentationModel
         private double y;
         private double radius;
 
-        private Random random;
+        private Timer MoveTimer;
+        private Random Random = new Random();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public BallModel(double xvalue, double yvalue)
-        {
-            x = xvalue;
-            y = yvalue;
-            //MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
-        }
 
         public double X 
         {
@@ -56,9 +51,24 @@ namespace PresentationModel
 
         public double Radius { get; internal set; }
 
+        private void Move(object state)
+        {
+            if (state != null)
+                throw new ArgumentOutOfRangeException(nameof(state));
+            Y = Y + (Random.NextDouble() - 0.5) * 10;
+            X = X + (Random.NextDouble() - 0.5) * 10;
+        }
+
+        public BallModel(double xvalue, double yvalue)
+        {
+            x = xvalue;
+            y = yvalue;
+            MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+        }
+
         public void Dispose()
         {
-            throw new NotImplementedException();
+            MoveTimer.Dispose();
         }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
