@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer
 {
-    internal class Ball : INotifyPropertyChanged
+    public class Ball : INotifyPropertyChanged
     {
         private double x;
         private double y;

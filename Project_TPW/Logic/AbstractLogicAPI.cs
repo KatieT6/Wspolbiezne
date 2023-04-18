@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logic
+namespace LogicLayer
 {
-    internal class Class1
+    internal class AbstractLogicAPI
     {
     }
 }
