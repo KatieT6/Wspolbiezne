@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using DataLayer;
+using Data;
 
-namespace LogicLayer
+namespace Logic
 {
-    internal class BallWrapper
+    public class BallWrapper : INotifyPropertyChanged
     {
         private bool moved = false;
 

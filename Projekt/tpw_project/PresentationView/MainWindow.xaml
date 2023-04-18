@@ -6,7 +6,81 @@
         xmlns:local="clr-namespace:PresentationView"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+
+    <Grid HorizontalAlignment="Stretch" 
+          VerticalAlignment="Center" 
+          Margin="5,10,5,10">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="8*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Column="0" 
+                Grid.Row="0" 
+                BorderBrush="Black" 
+                BorderThickness="3" 
+                Width="456">
+            <ItemsControl ItemsSource="{Binding Balls}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Background="LightGray"
+                                Height="300" 
+                                Width="450"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Canvas.Left"
+                                Value="{Binding X}" />
+                        <Setter Property="Canvas.Top"
+                                Value="{Binding Y}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Ellipse Width="{Binding Diameter}"
+                                 Height="{Binding Diameter}"
+                                 Fill="GreenYellow"
+                                 Stroke="Black"
+                                 StrokeThickness="1">
+                            <Ellipse.RenderTransform>
+                                <TranslateTransform X="{Binding CenterTransform}" 
+                                                    Y="{Binding CenterTransform}" />
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+
+        <StackPanel Grid.Column="1" 
+                    Grid.Row="0" 
+                    HorizontalAlignment="Stretch" 
+                    Width="Auto" 
+                    VerticalAlignment="Center">
+            <Button Content="Start"
+                    Command="{Binding StartCommand}"/>
+            <Button Content="Dodaj kulę" 
+                    Margin="0,5,0,5" 
+                    Background="LightGreen"
+                    Command="{Binding AddBallCommand}"/>
+            <TextBox TextWrapping="NoWrap" 
+                     Text="{Binding BallCount}" 
+                     FontSize="15" 
+                     TextAlignment="Right" 
+                     Margin="0,5,0,5"
+                     Width="Auto" />
+            <Button Content="Usuń kulę" 
+                    Margin="0,5,0,5" 
+                    Background="OrangeRed"
+                    Command="{Binding RemoveBallCommand}"
+                    IsEnabled="False"/>
+        </StackPanel>
+
     </Grid>
 </Window>

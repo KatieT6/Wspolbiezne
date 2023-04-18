@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace DataLayer
+namespace Data
 {
-    internal class Box
+    public class Box
     {
         private readonly double sizeX;
         private readonly double sizeY;
