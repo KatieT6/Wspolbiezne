@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class Ball
+    public class Ball :INotifyPropertyChanged
     {
         private double positionX;
         private double positionY;
@@ -48,6 +48,12 @@ namespace Data
         protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void updateBall(double velocityX, double velocityY)
+        {
+            PositionX += velocityX;
+            PositionY += velocityY;
         }
 
     }

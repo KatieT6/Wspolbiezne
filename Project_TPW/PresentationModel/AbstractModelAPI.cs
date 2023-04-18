@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive;
 using System.CodeDom.Compiler;
+using Data;
 
 namespace PresentationModel
 {
@@ -12,9 +13,10 @@ namespace PresentationModel
 
     public abstract class AbstractModelAPI : IObservable<InterfaceBall>, IDisposable
     {
-        public static AbstractModelAPI CreateAPI()
+        private readonly AbstractDataAPI _dataAPI;
+        public static AbstractLogicAPI createLogicAPI(AbstractDataAPI dataAPI = null)
         {
-            return new Model();
+            return new LogicAPI(dataAPI);
         }
 
         public abstract void CreateScene(int ballQuantity, int ballRadious);
