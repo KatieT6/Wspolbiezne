@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace PresentationView
 {
     /// <summary>
-    /// Logika interakcji dla klasy MainWindow.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -24,6 +24,5 @@ namespace PresentationView
         {
             InitializeComponent();
         }
-
     }
 }

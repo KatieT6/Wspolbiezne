@@ -16,12 +16,11 @@ namespace DataLayer
         private double m = 4;
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        public Ball(double x, double y, double r, double m)
+        public Ball(double x, double y, double r)
         {
             this.x = x;
             this.y = y;
             this.r = r;
-            this.m = m;
         }
         public double Mass { get => m; }
         public double Radius { get => r; }

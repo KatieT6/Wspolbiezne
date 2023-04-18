@@ -1,6 +1,6 @@
 using System;
 
-namespace Logic
+namespace Presentation
 {
     public class Class1
     {
