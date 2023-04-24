@@ -3,10 +3,46 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PresentationView"
+        xmlns:viewmodel="clr-namespace:PresentationViewModel;assembly=PresentationViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="532" Width="823">
 
+    <Window.DataContext>
+        <viewmodel:MyViewModel/>
+    </Window.DataContext>
+    
+    <Grid>
+        <Button Content="Start" Command="{Binding ClickButton}"  HorizontalAlignment="Left" Margin="334,36,0,0" VerticalAlignment="Top" Width="86" Height="21"/>
+        <Label Content="Pass an amount of balls:" HorizontalAlignment="Left" Margin="61,32,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding BallsAmount}" x:Name="inputNumber"  HorizontalAlignment="Left" Height="23" Margin="203,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
+        <Button Content="Stop" Command="{Binding ExitClick}" HorizontalAlignment="Left" Margin="481,36,0,0" VerticalAlignment="Top" Height="22" Width="77"/>
+        <Rectangle
+        x:Name="Rectangle"
+        Stroke="Black" 
+        StrokeThickness="4"
+        Canvas.Left="10"
+        Canvas.Top="25" Margin="29,81,23,10"
+        Height="{Binding ViewHeight}"
+        Width="{Binding ViewWidth}"/>
+        <ItemsControl ItemsSource="{Binding BallsGroup,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="29,81,23,10">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+
+
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding X}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse Width="25" Height="25" Fill="Blue"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Window>
