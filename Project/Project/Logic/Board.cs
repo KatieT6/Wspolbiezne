@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Logic
@@ -15,6 +16,7 @@ namespace Logic
         public static int _boardHeight = 400;
         private CancellationToken _cancelToken;
         private List<Task> _tasks = new List<Task>();
+        private List<Thread> _threads = new List<Thread>();
         public ObservableCollection<Ball> _balls = new ObservableCollection<Ball>();
         private readonly DataAbstractAPI dataAPI;
 
@@ -27,11 +29,12 @@ namespace Logic
 
         public override void RunSimulation()
         {
+            _cancelToken = CancellationToken.None;
             foreach (Ball ball in _balls)
             {
-                Task task = Task.Run(() =>
+                /*Task task = Task.Run(() =>
                 {
-                    Thread.Sleep(1);
+                    //Thread.Sleep(1);
                     while (true)
                     {
                         Thread.Sleep(5);
@@ -48,13 +51,36 @@ namespace Logic
                     }
                 }
                 );
-                _tasks.Add(task);
+                _tasks.Add(task);*/
+
+                Thread thread = new Thread(() =>
+                {
+                    //Thread.Sleep(1);
+                    while (true)
+                    {
+                        Thread.Sleep(5);
+                        try
+                        {
+                            _cancelToken.ThrowIfCancellationRequested();
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            break;
+                        }
+
+                        ball.ChangePosition();
+                    }
+                });
+                thread.IsBackground = true;
+                thread.Start();
+                _threads.Add(thread);
             }
         }
 
         public override void StopSimulation()
         {
-            _tasks.Clear();
+            _cancelToken = new CancellationToken(true);
+            _threads.Clear();
             _balls.Clear();
         }
 
