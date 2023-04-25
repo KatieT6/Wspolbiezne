@@ -34,7 +34,7 @@ namespace Logic
                     Thread.Sleep(1);
                     while (true)
                     {
-                        Thread.Sleep(10);
+                        Thread.Sleep(5);
                         try
                         {
                             _cancelToken.ThrowIfCancellationRequested();

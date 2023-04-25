@@ -1,19 +1,20 @@
 ﻿using Logic;
 using System.Numerics;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LogicTest
 {
+    [TestClass]
     public class BallTests
     {
         private LogicAbstractAPI _logicApi;
-        [SetUp]
+        [TestInitialize]
         public void SetUp()
         {
             _logicApi = LogicAbstractAPI.CreateApi();
         }
 
-        [Test]
+        [TestMethod]
         public void BallContructorTest()
         {
             Vector2 v = new Vector2(1, 2);
@@ -25,7 +26,7 @@ namespace LogicTest
 
         }
 
-        [Test]
+        [TestMethod]
         public void PositionChangedTest()
         {
             Ball ball = new Ball();
@@ -36,7 +37,7 @@ namespace LogicTest
             Assert.AreNotEqual(_logicApi.Height, ball.Velocity.Y);
         }
 
-        [Test]
+        [TestMethod]
         public void BallVelocityTest()
         {
             Ball ball = new Ball();
@@ -46,7 +47,7 @@ namespace LogicTest
         }
 
 
-        [Test]
+        [TestMethod]
         public void LogicApiConstructorTest()
         {
             int _width = 750;
@@ -56,7 +57,7 @@ namespace LogicTest
             Assert.AreEqual(_logicApi.Balls.Count, 0);
         }
 
-        [Test]
+        [TestMethod]
         public void CreateBallsTest()
         {
             int _amount = 5;
@@ -75,7 +76,7 @@ namespace LogicTest
 
         }
 
-        [Test]
+        [TestMethod]
         public void DeleteBallsTest()
         {
             _logicApi.DeleteBalls();
