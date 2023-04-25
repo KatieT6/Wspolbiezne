@@ -16,11 +16,11 @@ namespace Logic
         private CancellationToken _cancelToken;
         private List<Task> _tasks = new List<Task>();
         public ObservableCollection<Ball> _balls = new ObservableCollection<Ball>();
-        private readonly DataAbstractAPI dataAbstract;
+        private readonly DataAbstractAPI dataAPI;
 
-        public Board(DataAbstractAPI dataAbstractAPI)
+        public Board()
         {
-            this.dataAbstract = dataAbstractAPI;
+            this.dataAPI = DataAbstractAPI.CreateDataAPI();
         }
 
         public CancellationToken CancellationToken => _cancelToken;

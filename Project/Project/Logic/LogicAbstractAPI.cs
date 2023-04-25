@@ -11,9 +11,9 @@ namespace Logic
 {
     public abstract class LogicAbstractAPI
     {
-        public static LogicAbstractAPI CreateApi(DataAbstractAPI dataAbstractAPI = default(DataAbstractAPI))
+        public static LogicAbstractAPI CreateApi()
         {
-            return new Board(dataAbstractAPI);
+            return new Board();
         }
 
         public abstract int Width { get; }

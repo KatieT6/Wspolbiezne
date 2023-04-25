@@ -10,7 +10,7 @@ namespace LogicTest
         [SetUp]
         public void SetUp()
         {
-            _logicApi = LogicAbstractAPI.CreateApi(new DataSimulation());
+            _logicApi = LogicAbstractAPI.CreateApi();
         }
 
         [Test]

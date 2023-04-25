@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 
 namespace DataTests
 {
-    internal class DataAbstractAPITests
+    [TestClass]
+    public class DataAbstractAPITest
     {
+        [TestMethod]
+        public void CreateAPITest()
+        {
+            DataAbstractAPI api = DataAbstractAPI.CreateDataAPI();
+            Assert.IsNotNull(api);
+        }
     }
 }
