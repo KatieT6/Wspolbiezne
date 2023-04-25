@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace PresentationViewModel
 {
@@ -41,7 +36,7 @@ namespace PresentationViewModel
         public event EventHandler CanExecuteChanged;
 
 
-        internal void RaiseCanExecuteChanged()
+        public void RaiseCanExecuteChanged()
         {
             this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }

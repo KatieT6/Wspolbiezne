@@ -1,12 +1,6 @@
 ﻿using Data;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Logic
 {
@@ -32,27 +26,6 @@ namespace Logic
             _cancelToken = CancellationToken.None;
             foreach (Ball ball in _balls)
             {
-                /*Task task = Task.Run(() =>
-                {
-                    //Thread.Sleep(1);
-                    while (true)
-                    {
-                        Thread.Sleep(5);
-                        try
-                        {
-                            _cancelToken.ThrowIfCancellationRequested();
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            break;
-                        }
-
-                        ball.ChangePosition();
-                    }
-                }
-                );
-                _tasks.Add(task);*/
-
                 Thread thread = new Thread(() =>
                 {
                     //Thread.Sleep(1);
