@@ -25,7 +25,7 @@ namespace Logic
             set => _position = value;
         }
 
-        public Vector2 Velocity { get; set; }
+        public Vector2 Velocity { get; set; }// seter tylko potrzebny 
 
 
         public float X
@@ -37,7 +37,7 @@ namespace Logic
             get => _position.Y;
         }
 
-        public int Radius
+        public int Radius //to ma być w board 
         {
             get { return _radius; }
             set { _radius = value; }
@@ -45,7 +45,7 @@ namespace Logic
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void ChangePosition()
+        public void ChangePosition()//ma być prywatny i ma być definiowany wątek dla każej bili
         {
             Position += new Vector2(Velocity.X * _speed, Velocity.Y * _speed);
             if (Position.X < 0 || Position.X > Board._boardWidth - 25)
@@ -58,12 +58,21 @@ namespace Logic
                 Velocity *= -Vector2.UnitY;
             }
 
-            RaisePropertyChanged(nameof(X));
-            RaisePropertyChanged(nameof(Y));
+            //mamy informować o zmianach X i Y razem, NIE OSOBNO - zmienić na wektor zeby razem były przekazywane
+
+            RaisePropertyChanged(nameof(X)); //są elementen porogramowania współbieżnego
+            RaisePropertyChanged(nameof(Y)); //zabezpieczyć sekcją krytyczną
+            //metody ktore wywołuje jedna piłka sa asynchronicznie wywoływane
+            //przy zdeżeniach się przyda - sekcja krytyczna - board 
+            //kolejnośc wywolan metod poszczególnych kulek nie da się przewidziać
+
+            //jak będą wypisywane błędy to implementacja z prezentationModel nie jest odpowiednia 
         }
         protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));//wywolujemy wszystkie metody ktore zostały do tej zmiennej podstawione;
+                                            //parametry zgodne z tym;
+                                            //
         }
 
     }

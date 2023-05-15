@@ -26,12 +26,13 @@ namespace Logic
             _cancelToken = CancellationToken.None;
             foreach (Ball ball in _balls)
             {
+                //zdenfiniować wątek w samej billi 
                 Thread thread = new Thread(() =>
                 {
                     //Thread.Sleep(1);
                     while (true)
                     {
-                        Thread.Sleep(5);
+                        Thread.Sleep(5);//tutaj ma być wartosc funkcji pretkości dla kazdej kulki zdefiniowana
                         try
                         {
                             _cancelToken.ThrowIfCancellationRequested();
@@ -41,7 +42,8 @@ namespace Logic
                             break;
                         }
 
-                        ball.ChangePosition();
+                        ball.ChangePosition();//zrobic pomiar czasu co ile changePosition jest wykonywane;
+                                              //
                     }
                 });
                 thread.IsBackground = true;
