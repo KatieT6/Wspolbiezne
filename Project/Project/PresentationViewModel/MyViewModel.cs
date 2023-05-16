@@ -41,15 +41,15 @@ namespace PresentationViewModel
         {
             modelAPI = ModelAbstractAPI.CreateModelAPI(DataAbstractAPI.CreateDataAPI(15, 3, 900));
             _Balls = getBalls();
-            ClickButton = new RelayCommand(ClickHandler);
-            ExitClick = new RelayCommand(ExitClickHandler);
+            ClickButton = new RelayCommand(OnClickButton);
+            ExitClick = new RelayCommand(OnExitClick);
 
         }
 
         public ICommand ClickButton { get; set; }
         public ICommand ExitClick { get; set; }
 
-        private void ClickHandler()
+        private void OnClickButton()
         {
             modelAPI.CreateBalls(_amountOfBalls);
 
@@ -62,7 +62,7 @@ namespace PresentationViewModel
             modelAPI.TaskRun();
         }
 
-        private void ExitClickHandler()
+        private void OnExitClick()
         {
             modelAPI.TaskStop();
         }
