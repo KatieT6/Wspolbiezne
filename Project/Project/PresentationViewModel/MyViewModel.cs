@@ -31,11 +31,16 @@ namespace PresentationViewModel
             }
         }
 
+        public int AmountOfBalls { 
+            get => _amountOfBalls; 
+            set => _amountOfBalls = value; 
+        }
+
 
         public MyViewModel()
         {
             //trzeba zmienić konstruktor LogicAPI (chyba)
-            modelAPI = ModelAbstractAPI.CreateModelAPI(LogicAbstractAPI.CreateLogicAPI(15, 3, 900));
+            modelAPI = ModelAbstractAPI.CreateModelAPI(DataAbstractAPI.CreateDataAPI(15, 3, 900));
             _Balls = getBalls();
             ClickButton = new RelayCommand(ClickHandler);
             ExitClick = new RelayCommand(ExitClickHandler);
@@ -44,7 +49,7 @@ namespace PresentationViewModel
 
         public ICommand ClickButton { get; set; }
         public ICommand ExitClick { get; set; }
-        
+
         private void ClickHandler()
         {
             modelAPI.CreateBalls(_amountOfBalls);
