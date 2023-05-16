@@ -14,8 +14,6 @@ namespace Data
         private float _mass;
 
 
-        public Ball() { }
-
         public Ball(float speed, float radious, float mass)
         {
             _radious = radious;
@@ -119,7 +117,9 @@ namespace Data
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            }//wywolujemy wszystkie metody ktore zostały do tej zmiennej podstawione;
+             //parametry zgodne z tym;
+             //
         }
 
     }

@@ -10,6 +10,10 @@ namespace Data
             return new DataLayer(radious, mass, v);
         }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1837e2eabe93ff200666d200c17dfabddec8b8d1
         public abstract void generateBalls(int _amount);
         public abstract ObservableCollection<Ball> getBalls();
 

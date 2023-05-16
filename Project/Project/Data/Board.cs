@@ -7,9 +7,6 @@ namespace Data
     {
         public static int _boardWidth = 750;
         public static int _boardHeight = 400;
-        //private CancellationToken _cancelToken;
-       /* private List<Task> _tasks = new List<Task>();
-        private List<Thread> _threads = new List<Thread>();*/
         public ObservableCollection<Ball> _balls = new();
 
         public Board()

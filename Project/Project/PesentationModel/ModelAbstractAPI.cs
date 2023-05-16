@@ -3,24 +3,24 @@ using System.Collections.ObjectModel;
 using Data;
 using Logic;
 
-namespace Presentation.Model
+namespace PresentationModel
 {
-    public abstract class ModelAbstractApi
+    public abstract class ModelAbstractAPI
     {
 
 
-        public static ModelApi CreateModelApi(DataAbstractAPI data)
+        public static ModelApi CreateModelAPI(DataAbstractAPI data)
         {
             return new ModelApi(data);
         }
-        public abstract void CreateBall(int amount);
+        public abstract void CreateBalls(int amount);
         public abstract void TaskRun();
         public abstract void TaskStop();
         public abstract ObservableCollection<Ball> GetBalls();
 
 
     }
-    public class ModelApi : ModelAbstractApi
+    public class ModelApi : ModelAbstractAPI
     {
 
         private DataAbstractAPI _data;
@@ -32,7 +32,7 @@ namespace Presentation.Model
         }
 
 
-        public override void CreateBall(int amount)
+        public override void CreateBalls(int amount)
         {
             _data.generateBalls(amount);
         }
