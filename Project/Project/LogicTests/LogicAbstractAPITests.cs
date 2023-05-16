@@ -11,7 +11,7 @@ namespace LogicTest
         [TestInitialize]
         public void SetUp()
         {
-            _logicApi = LogicAbstractAPI.CreateApi();
+            _logicApi = LogicAbstractAPI.CreateLogicAPI();
         }
 
         [TestMethod]
