@@ -115,9 +115,11 @@ namespace Data
         }
         protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));//wywolujemy wszystkie metody ktore zostały do tej zmiennej podstawione;
-                                            //parametry zgodne z tym;
-                                            //
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
     }

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Numerics;
 using Data;
+using Microsoft.VisualBasic;
 
 namespace Logic
 {
-    internal class BallsHandler
+    public class BallService
     {
+
         public static Ball CheckCollision(Ball ball, IEnumerable<Ball> ballsList)
         {
             foreach (Ball ballTwo in ballsList)
@@ -33,8 +33,8 @@ namespace Logic
         {
 
 
-            Vector2 centerOne = ballOne.Position + (Vector2.One * ballOne.Radious / 2) + ballOne.Velocity * (16 / 1000f);
-            Vector2 centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radious / 2) + ballTwo.Velocity * (16 / 1000f);
+            Vector2 centerOne = ballOne.Position + (Vector2.One * ballOne.Radious / 2) + ballOne.Valocity * (16 / 1000f);
+            Vector2 centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radious / 2) + ballTwo.Valocity * (16 / 1000f);
 
             float distance = Vector2.Distance(centerOne, centerTwo);
             float radiusSum = (ballOne.Radious + ballTwo.Radious) / 2f;
@@ -89,4 +89,6 @@ namespace Logic
 
         }
     }
+
+
 }

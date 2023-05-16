@@ -1,17 +1,22 @@
 ﻿using Logic;
 using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Data;
 
 namespace LogicTest
 {
     [TestClass]
     public class BallTests
     {
-        private LogicAbstractAPI _logicApi;
+        private LogicAbstractApi _logicApi;
+        DataAbstractAPI data;
+
         [TestInitialize]
-        public void SetUp()
+        public void Setup()
         {
-            _logicApi = LogicAbstractAPI.CreateLogicAPI();
+            data = DataAbstractAPI.CreateDataAPI(5, 4, 3);
+            data.generateBalls(10);
+            _logicApi = LogicAbstractApi.CreateLogicAPI(data);
         }
 
         [TestMethod]
@@ -33,7 +38,7 @@ namespace LogicTest
             ball.Velocity = new Vector2(1, 2);
             ball.Position = new Vector2(_logicApi.Width, _logicApi.Height);
             ball.ChangePosition();
-            Assert.AreNotEqual(_logicApi.Width, ball.Velocity.X);
+            Assert.AreNotEqual(_logicApi., ball.Velocity.X);
             Assert.AreNotEqual(_logicApi.Height, ball.Velocity.Y);
         }
 

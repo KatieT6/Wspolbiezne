@@ -1,53 +1,60 @@
-﻿using Data;
-using Logic;
+﻿using System;
 using System.Collections.ObjectModel;
-using System.Xml.Linq;
+using Data;
+using Logic;
 
-namespace PesentationModel
+namespace Presentation.Model
 {
-    public abstract class ModelAbstractAPI
+    public abstract class ModelAbstractApi
     {
-        public static ModelAbstractAPI CreateModelAPI(LogicAbstractAPI logicApi = default(LogicAbstractAPI))
-        {
-            return new ModelAPILayer(logicApi);
-        }
 
-        public abstract void CreateBalls(int amount);
-        public abstract void CallSimulation();
-        public abstract void StopSimulation();
-        public abstract ObservableCollection<Ball> GetBalls(); 
+
+        public static ModelApi CreateModelApi(DataAbstractAPI data)
+        {
+            return new ModelApi(data);
+        }
+        public abstract void CreateBall(int amount);
+        public abstract void TaskRun();
+        public abstract void TaskStop();
+        public abstract ObservableCollection<Ball> GetBalls();
+
+
     }
-    internal class ModelAPILayer : ModelAbstractAPI
+    public class ModelApi : ModelAbstractApi
     {
-        private readonly LogicAbstractAPI logicLayer;
 
-        //public ModelAPILayer() : this(LogicAbstractAPI.CreateLogicAPI()) { }
-
-        public ModelAPILayer(LogicAbstractAPI logicApi)
+        private DataAbstractAPI _data;
+        private LogicAbstractApi logicApi;
+        public ModelApi(DataAbstractAPI data)
         {
-            logicLayer = logicApi ?? LogicAbstractAPI.CreateLogicAPI();
+            _data = data;
+            logicApi = LogicAbstractApi.CreateLogicAPI(_data);
         }
 
-        public override void CallSimulation()
-        {
-            logicLayer.RunSimulation();
-        }
 
-        public override void StopSimulation()
+        public override void CreateBall(int amount)
         {
-            logicLayer.StopSimulation();
+            _data.generateBalls(amount);
         }
 
         public override ObservableCollection<Ball> GetBalls()
         {
-            return logicLayer.getBalls();
+            return _data.getBalls();
         }
 
-        public override void CreateBalls(int amount)
+        public override void TaskRun()
         {
-            logicLayer.GenerateBalls(amount);
+            if (_data.getBalls().Count == 0)
+            {
+                throw new NullReferenceException("brak pilek w model");
+            }
+            logicApi.TaskRun();
         }
 
+        public override void TaskStop()
+        {
+            logicApi.TaskStop();
+        }
 
     }
 }

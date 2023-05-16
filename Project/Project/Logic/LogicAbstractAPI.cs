@@ -1,60 +1,52 @@
-﻿using Data;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Numerics;
+using System.Threading;
+using Data;
+using Microsoft.VisualBasic;
 
 namespace Logic
 {
-    public abstract class LogicAbstractAPI
+    public abstract class LogicAbstractApi
     {
-        public static LogicAbstractAPI CreateLogicAPI(DataAbstractAPI dataAPI = default(DataAbstractAPI))
+        //refer to Data
+        public static LogicAbstractApi CreateLogicAPI(DataAbstractAPI data)
         {
-            return new LogicAPI(dataAPI);
+            return new LogicApi(data);
         }
 
-
-        public abstract int Width { get; }
-        public abstract int Height { get; }
-        public abstract ObservableCollection<Ball> Balls { get; }
-        public abstract void RunSimulation();
-        public abstract void StopSimulation();
-        public abstract void GenerateBalls(int _amount);
+        public abstract void TaskRun();
+        public abstract void TaskStop();
         public abstract ObservableCollection<Ball> getBalls();
     }
-
-
-
-    public class LogicAPI : LogicAbstractAPI
+    public class LogicApi : LogicAbstractApi
     {
         private List<Task> _tasks = new List<Task>();
         private CancellationToken _cancelToken;
-        private readonly DataAbstractAPI DataLayer;
+        DataAbstractAPI data;
         private bool isCancelled = false;
 
-        public LogicAPI(DataAbstractAPI dataAPI)
+
+
+        public LogicApi(DataAbstractAPI data)
         {
-            this.DataLayer = dataAPI ?? DataAbstractAPI.CreateDataAPI();
+            this.data = data;
         }
+
         public CancellationToken CancellationToken => _cancelToken;
-
-        public override int Width => throw new NotImplementedException();
-
-        public override int Height => throw new NotImplementedException();
-
-        public override ObservableCollection<Ball> Balls => throw new NotImplementedException();
 
         public override ObservableCollection<Ball> getBalls()
         {
-            return DataLayer.getBalls();
+            return data.getBalls();
         }
 
-        public override void RunSimulation()
+        public override void TaskRun()
         {
             isCancelled = false;
-            if (DataLayer.getBalls().Count == 0)
+            if (data.getBalls().Count == 0)
             {
-                throw new ArgumentNullException("Nie ma kuleczek :(");
+                throw new ArgumentNullException("brak pilek w logic");
             }
-            foreach (var ball in DataLayer.getBalls())
+            foreach (var ball in data.getBalls())
             {
                 Task task = new Task(async () =>
                 {
@@ -62,28 +54,26 @@ namespace Logic
                     while (!isCancelled)
                     {
                         await ball.ChangePosition();
-                        lock (DataLayer)
+                        lock (data)
                         {
-                            BallsHandler.Collide(ball, DataLayer.getBalls());
+                            BallService.Collide(ball, data.getBalls());
                         }
                     }
                 });
                 task.Start();
                 _tasks.Add(task);
             }
+
         }
 
-        public override void StopSimulation()
+
+        public override void TaskStop()
         {
             isCancelled = true;
-            DataLayer.getBalls().Clear();
+            data.getBalls().Clear();
 
             _tasks.Clear();
         }
 
-        public override void GenerateBalls(int _amount)
-        {
-            DataLayer.generateBalls(_amount);
-        }
     }
 }
