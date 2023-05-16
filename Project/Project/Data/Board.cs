@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace Data
 {
-    internal class Board 
+    public class Board 
     {
         public static int _boardWidth = 750;
         public static int _boardHeight = 400;

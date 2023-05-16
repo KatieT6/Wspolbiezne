@@ -1,6 +1,6 @@
 ﻿using Data;
 using Logic;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Numerics;
 
 namespace LogicTest.UnitTest
@@ -10,7 +10,7 @@ namespace LogicTest.UnitTest
         LogicAbstractApi api;
         DataAbstractAPI data;
 
-        [SetUp]
+        [TestInitialize]
         public void Setup()
         {
             data = DataAbstractAPI.CreateDataAPI(5, 4, 3);
@@ -19,13 +19,13 @@ namespace LogicTest.UnitTest
         }
 
 
-        [Test]
+        [TestMethod]
         public void CreateBallsTest()
         {
             int _amount = 10;
             int _radius = 25;
             api.TaskRun();
-            Assert.That(api.getBalls().Count, Is.EqualTo(_amount));
+            Assert.AreEqual(api.getBalls().Count, _amount);
 
             foreach (Ball ball in data.getBalls())
             {
@@ -37,7 +37,7 @@ namespace LogicTest.UnitTest
 
         }
 
-        [Test]
+        [TestMethod]
         public void DeleteBallsTest()
         {
             api.TaskStop();

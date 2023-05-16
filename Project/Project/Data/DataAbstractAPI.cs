@@ -10,11 +10,6 @@ namespace Data
             return new DataLayer(radious, mass, v);
         }
 
-        public static DataAbstractAPI CreateDataAPI()
-        {
-            throw new NotImplementedException();
-        }
-
         public abstract void generateBalls(int _amount);
         public abstract ObservableCollection<Ball> getBalls();
 
