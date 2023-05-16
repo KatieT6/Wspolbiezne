@@ -33,8 +33,8 @@ namespace Logic
         {
 
 
-            Vector2 centerOne = ballOne.Position + (Vector2.One * ballOne.Radious / 2) + ballOne.Valocity * (16 / 1000f);
-            Vector2 centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radious / 2) + ballTwo.Valocity * (16 / 1000f);
+            Vector2 centerOne = ballOne.Position + (Vector2.One * ballOne.Radious / 2) + ballOne.Velocity * (16 / 1000f);
+            Vector2 centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radious / 2) + ballTwo.Velocity * (16 / 1000f);
 
             float distance = Vector2.Distance(centerOne, centerTwo);
             float radiusSum = (ballOne.Radious + ballTwo.Radious) / 2f;

@@ -24,7 +24,7 @@
         Canvas.Top="25" Margin="29,81,23,10"
         Height="{Binding ViewHeight}"
         Width="{Binding ViewWidth}"/>
-        <ItemsControl ItemsSource="{Binding BallsGroup,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="29,81,23,10">
+        <ItemsControl ItemsSource="{Binding _Balls,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="29,81,23,10">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
