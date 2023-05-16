@@ -1,6 +1,6 @@
 ﻿using Data;
 using Logic;
-using PesentationModel;
+using PresentationModel;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -39,7 +39,6 @@ namespace PresentationViewModel
 
         public MyViewModel()
         {
-            //trzeba zmienić konstruktor LogicAPI (chyba)
             modelAPI = ModelAbstractAPI.CreateModelAPI(DataAbstractAPI.CreateDataAPI(15, 3, 900));
             _Balls = getBalls();
             ClickButton = new RelayCommand(ClickHandler);
@@ -60,12 +59,12 @@ namespace PresentationViewModel
             }
 
 
-            modelAPI.CallSimulation();
+            modelAPI.TaskRun();
         }
 
         private void ExitClickHandler()
         {
-            modelAPI.StopSimulation();
+            modelAPI.TaskStop();
         }
 
 
