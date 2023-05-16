@@ -1,16 +1,49 @@
 ﻿
+using System.Collections.ObjectModel;
+
 namespace Data
 {
     public abstract class DataAbstractAPI
     {
+        public static DataAbstractAPI CreateDataAPI(float radious, float mass, float v)
+        {
+            return new DataLayer(radious, mass, v);
+        }
+
         public static DataAbstractAPI CreateDataAPI()
         {
-            return new DataLayer();
+            throw new NotImplementedException();
         }
+
+        public abstract void generateBalls(int _amount);
+        public abstract ObservableCollection<Ball> getBalls();
 
     }
     public class DataLayer : DataAbstractAPI
     {
-        public DataLayer() { }
+        private float _ballradious;
+        private float _ballmass;
+        private float _v;
+        private Board board;
+
+
+        public DataLayer(float radious, float mass, float v)
+        {
+
+            this._ballradious = radious;
+            this._ballmass = mass;
+            this._v = v;
+            board = new Board();
+        }
+
+        public override void generateBalls(int _amount)
+        {
+            board.GenerateBalls(_amount, _ballradious, _ballmass, _v);
+        }
+
+        public override ObservableCollection<Ball> getBalls()
+        {
+            return board.Balls;
+        }
     }
 }

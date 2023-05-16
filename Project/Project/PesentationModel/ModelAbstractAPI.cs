@@ -1,5 +1,7 @@
-﻿using Logic;
+﻿using Data;
+using Logic;
 using System.Collections.ObjectModel;
+using System.Xml.Linq;
 
 namespace PesentationModel
 {
@@ -10,25 +12,20 @@ namespace PesentationModel
             return new ModelAPILayer(logicApi);
         }
 
-        public abstract int Width { get; }
-        public abstract int Height { get; }
-
-        public abstract ObservableCollection<Ball> CreateBalls(int ballsNumber, int radius);
+        public abstract void CreateBalls(int amount);
         public abstract void CallSimulation();
         public abstract void StopSimulation();
-        public abstract int GetBallAmount();
+        public abstract ObservableCollection<Ball> GetBalls(); 
     }
     internal class ModelAPILayer : ModelAbstractAPI
     {
         private readonly LogicAbstractAPI logicLayer;
-        public override int Width => logicLayer.Width;
-        public override int Height => logicLayer.Height;
 
-        public ModelAPILayer() : this(LogicAbstractAPI.CreateApi()) { }
+        //public ModelAPILayer() : this(LogicAbstractAPI.CreateLogicAPI()) { }
 
         public ModelAPILayer(LogicAbstractAPI logicApi)
         {
-            logicLayer = logicApi ?? LogicAbstractAPI.CreateApi();
+            logicLayer = logicApi ?? LogicAbstractAPI.CreateLogicAPI();
         }
 
         public override void CallSimulation()
@@ -41,15 +38,14 @@ namespace PesentationModel
             logicLayer.StopSimulation();
         }
 
-        public override ObservableCollection<Ball> CreateBalls(int ballsNumber, int radius)
+        public override ObservableCollection<Ball> GetBalls()
         {
-            logicLayer.CreateBalls(ballsNumber, radius);
-            return logicLayer.Balls;
+            return logicLayer.getBalls();
         }
 
-        public override int GetBallAmount()
+        public override void CreateBalls(int amount)
         {
-            return logicLayer.Balls.Count;
+            logicLayer.GenerateBalls(amount);
         }
 
 

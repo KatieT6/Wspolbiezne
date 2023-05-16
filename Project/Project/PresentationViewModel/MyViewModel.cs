@@ -1,67 +1,73 @@
-﻿using PesentationModel;
+﻿using Data;
+using Logic;
+using PesentationModel;
 using System.Collections;
+using System.ComponentModel;
 using System.Windows.Input;
 
 namespace PresentationViewModel
 {
-    public class MyViewModel : ViewModelBase
+    public class MyViewModel : INotifyPropertyChanged
     {
 
-        private readonly ModelAbstractAPI modelLayer;
-        private readonly int _width;
-        private readonly int _height;
+        private readonly ModelAbstractAPI modelAPI;
         private int _amountOfBalls;
-        private IList _balls;
 
-        public MyViewModel() : this(ModelAbstractAPI.CreateModelAPI()) { }
-
-        public MyViewModel(ModelAbstractAPI modelAbstractAPI)
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
         {
-            modelLayer = modelAbstractAPI;
-            _height = modelLayer.Height;
-            _width = modelLayer.Width;
-            ClickButton = new RelayCommand(() => ClickHandler());
-            ExitClick = new RelayCommand(() => ExitClickHandler());
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public IList<Ball> _Balls { get; set; }
+        Random random = new Random();
+
+        public IList<Ball> Balls
+        {
+            get => _Balls;
+            set
+            {
+                _Balls = value;
+            }
+        }
+
+
+        public MyViewModel()
+        {
+            //trzeba zmienić konstruktor LogicAPI (chyba)
+            modelAPI = ModelAbstractAPI.CreateModelAPI(LogicAbstractAPI.CreateLogicAPI(15, 3, 900));
+            _Balls = getBalls();
+            ClickButton = new RelayCommand(ClickHandler);
+            ExitClick = new RelayCommand(ExitClickHandler);
+
         }
 
         public ICommand ClickButton { get; set; }
         public ICommand ExitClick { get; set; }
-        public int ViewHeight
-        {
-            get { return _height; }
-        }
-        public int ViewWidth
-        {
-            get { return _width; }
-        }
+        
         private void ClickHandler()
         {
-            BallsGroup = modelLayer.CreateBalls(_amountOfBalls, 25);
-            modelLayer.CallSimulation();
+            modelAPI.CreateBalls(_amountOfBalls);
+
+            if (modelAPI.GetBalls().Count == 0)
+            {
+                throw new NullReferenceException("Brak kuleczek :(");
+            }
+
+
+            modelAPI.CallSimulation();
         }
 
         private void ExitClickHandler()
         {
-            modelLayer.StopSimulation();
+            modelAPI.StopSimulation();
         }
 
-        public int BallsAmount
+
+        public IList<Ball> getBalls()
         {
-            get { return _amountOfBalls; }
-            set
-            {
-                _amountOfBalls = value;
-                RaisePropertyChanged("Ball Amount");
-            }
-        }
-        public IList BallsGroup
-        {
-            get => _balls;
-            set
-            {
-                _balls = value;
-                RaisePropertyChanged("BallsGroup");
-            }
+
+            return modelAPI.GetBalls();
         }
 
 
