@@ -7,7 +7,7 @@ namespace LogicTest.UnitTest
 {
     public class Tests
     {
-        LogicAbstractApi api;
+        LogicAbstractAPI api;
         DataAbstractAPI data;
 
         [SetUp]
@@ -15,7 +15,7 @@ namespace LogicTest.UnitTest
         {
             data = DataAbstractAPI.CreateDataAPI(5, 4, 3);
             data.generateBalls(10);
-            api = LogicAbstractApi.CreateLogicAPI(data);
+            api = LogicAbstractAPI.CreateLogicAPI(data);
         }
 
 
@@ -24,8 +24,8 @@ namespace LogicTest.UnitTest
         {
             int _amount = 10;
             int _radius = 25;
-            api.TaskRun();
-            Assert.That(api.getBalls().Count, Is.EqualTo(_amount));
+            api.RunSimulation();
+            Assert.That(api.Balls().Count, Is.EqualTo(_amount));
 
             foreach (Ball ball in data.getBalls())
             {
@@ -40,8 +40,8 @@ namespace LogicTest.UnitTest
         [Test]
         public void DeleteBallsTest()
         {
-            api.TaskStop();
-            Assert.AreEqual(0, api.getBalls().Count);
+            api.StopSimulation();
+            Assert.AreEqual(0, api.Balls().Count);
         }
 
 

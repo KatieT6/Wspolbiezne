@@ -7,54 +7,51 @@ namespace PresentationModel
 {
     public abstract class ModelAbstractAPI
     {
+        public abstract int Width { get; }
+        public abstract int Height { get; }
 
-
-        public static ModelApi CreateModelAPI(DataAbstractAPI data)
+        public static ModelAbstractAPI CreateModelAPI(LogicAbstractAPI logicAPI = default(LogicAbstractAPI))
         {
-            return new ModelApi(data);
+            return new ModelAPI(logicAPI);
         }
-        public abstract void CreateBalls(int amount);
-        public abstract void TaskRun();
-        public abstract void TaskStop();
-        public abstract ObservableCollection<Ball> GetBalls();
+        public abstract void CallSimulation();
+        public abstract void StopSimulation();
+        public abstract ObservableCollection<BallService> CreateBalls(int ballsNumber);
+        public abstract int GetAmountOfBalls();
 
 
     }
-    public class ModelApi : ModelAbstractAPI
+    public class ModelAPI : ModelAbstractAPI
     {
+        private readonly LogicAbstractAPI logicAPI;
+        public override int Width => logicAPI.Board.BoardWidth;
+        public override int Height => logicAPI.Board.BoardHeight;
 
-        private DataAbstractAPI _data;
-        private LogicAbstractApi logicApi;
-        public ModelApi(DataAbstractAPI data)
+        public ModelAPI(LogicAbstractAPI logicAPI)
         {
-            _data = data;
-            logicApi = LogicAbstractApi.CreateLogicAPI(_data);
+            logicAPI = logicAPI ?? LogicAbstractAPI.CreateLogicAPI();
         }
 
 
-        public override void CreateBalls(int amount)
+        public override void CallSimulation()
         {
-            _data.generateBalls(amount);
+            logicAPI.RunSimulation();
         }
 
-        public override ObservableCollection<Ball> GetBalls()
+        public override void StopSimulation()
         {
-            return _data.getBalls();
+            logicAPI.StopSimulation();
         }
 
-        public override void TaskRun()
+        public override ObservableCollection<BallService> CreateBalls(int ballsNumber)
         {
-            if (_data.getBalls().Count == 0)
-            {
-                throw new NullReferenceException("brak pilek w model");
-            }
-            logicApi.TaskRun();
+            logicAPI.CreateBalls(ballsNumber);
+            return logicAPI.Balls;
         }
 
-        public override void TaskStop()
+        public override int GetAmountOfBalls()
         {
-            logicApi.TaskStop();
+            return logicAPI.Balls.Count;
         }
-
     }
 }

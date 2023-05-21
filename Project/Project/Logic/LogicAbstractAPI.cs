@@ -6,73 +6,149 @@ using Microsoft.VisualBasic;
 
 namespace Logic
 {
-    public abstract class LogicAbstractApi
+    public abstract class LogicAbstractAPI
     {
-        //refer to Data
-        public static LogicAbstractApi CreateLogicAPI(DataAbstractAPI data)
+        public static LogicAbstractAPI CreateLogicAPI()
         {
-            return new LogicApi(data);
+            return new LogicAPI();
         }
 
-        public abstract void TaskRun();
-        public abstract void TaskStop();
-        public abstract ObservableCollection<Ball> getBalls();
+        public abstract BallService CreateBall(Vector2 position, int radius);
+        public abstract void CreateBalls(int count);
+        public abstract void DeleteBalls();
+        public abstract void RunSimulation();
+        public abstract void StopSimulation();
+        public abstract ObservableCollection<BallService> Balls { get; }
+        public abstract Board Board { get; }
     }
-    public class LogicApi : LogicAbstractApi
+    internal class LogicAPI : LogicAbstractAPI
     {
         private List<Task> _tasks = new List<Task>();
         private CancellationToken _cancelToken;
-        DataAbstractAPI data;
-        private bool isCancelled = false;
+        DataAbstractAPI _dataAPI;
+
+        public override ObservableCollection<BallService> Balls { get; } = new ObservableCollection<BallService>();
+        public override Board Board { get; }
 
 
 
-        public LogicApi(DataAbstractAPI data)
+
+        public LogicAPI()
         {
-            this.data = data;
+            _dataAPI = DataAbstractAPI.CreateDataAPI();
+            Board = _dataAPI.GetBoardData();
+            BallService.SetBoardData(Board);
         }
 
-        public CancellationToken CancellationToken => _cancelToken;
 
-        public override ObservableCollection<Ball> getBalls()
-        {
-            return data.getBalls();
-        }
 
-        public override void TaskRun()
+        public override void RunSimulation()
         {
-            isCancelled = false;
-            if (data.getBalls().Count == 0)
+
+            _cancelToken = CancellationToken.None;
+
+            // Add Barrier object and set initial count to number of balls
+            Barrier barrier = new Barrier(Balls.Count);
+
+            foreach (BallService ball in Balls)
             {
-                throw new ArgumentNullException("brak pilek w logic");
-            }
-            foreach (var ball in data.getBalls())
-            {
-                Task task = new Task(async () =>
+                Task task = Task.Run(() =>
                 {
+                    // Wait for all balls to start updating before continuing
+                    barrier.SignalAndWait();
 
-                    while (!isCancelled)
+                    while (true)
                     {
-                        await ball.ChangePosition();
-                        lock (data)
+                        Thread.Sleep(5);
+
+                        try
                         {
-                            BallService.Collide(ball, data.getBalls());
+                            _cancelToken.ThrowIfCancellationRequested();
                         }
+                        catch (OperationCanceledException)
+                        {
+                            break;
+                        }
+
+                        foreach (BallService otherBall in Balls)
+                        {
+                            lock (Balls)
+                            {
+                                if (ball == otherBall) continue;
+                                if (ball.CollidesWith(otherBall))
+                                {
+                                    ball.HandleCollision(otherBall);
+                                }
+                            }
+                        }
+
+                        ball.ChangePosition();
                     }
                 });
-                task.Start();
+
                 _tasks.Add(task);
             }
 
         }
 
 
-        public override void TaskStop()
+        public override void StopSimulation()
         {
-            isCancelled = true;
-            data.getBalls().Clear();
+            _cancelToken = new CancellationToken(true);
+
+            foreach (Task task in _tasks)
+            {
+                task.Wait();
+            }
 
             _tasks.Clear();
+            Balls.Clear();
+        }
+
+        #region generateRandom
+
+        public static float GenerateRandomFloatInRange(Random random, float minValue, float maxValue)
+        {
+            return (float)(random.NextDouble() * (maxValue - minValue) + minValue);
+        }
+
+        public static Vector2 GenerateRandomVector2InRange(Random random, float minValue1, float maxValue1,
+            float minValue2, float maxValue2)
+        {
+            return (Vector2)(new Vector2(GenerateRandomFloatInRange(random, minValue1, maxValue1),
+                GenerateRandomFloatInRange(random, minValue2, maxValue2)));
+        }
+
+        #endregion
+
+        public override BallService CreateBall(Vector2 position, int radius)
+        {
+            Ball ball = _dataAPI.GetBallData(position, new Vector2((float)0.0034, (float)0.0034), radius, radius / 2);
+            BallService ballLogic = new BallService(ball);
+            Balls.Add(ballLogic);
+
+            return ballLogic;
+        }
+
+        public override void CreateBalls(int count)
+        {
+            var rnd = new Random((int)DateTime.Now.Ticks);
+
+            for (int i = 0; i < count; i++)
+            {
+                float speed = 0.0005f;
+                float radius = GenerateRandomFloatInRange(rnd, 10f, 30f);
+                Vector2 pos = GenerateRandomVector2InRange(rnd, 0, Board.BoardWidth - radius, 0, Board.BoardHeight - radius);
+                Vector2 vel = GenerateRandomVector2InRange(rnd, -speed, speed, -speed, speed);
+                Ball ballData = _dataAPI.GetBallData(pos, vel, radius, radius / 2);
+                BallService ballLogic = new BallService(ballData);
+                Balls.Add(ballLogic);
+            }
+        }
+
+        public override void DeleteBalls()
+        {
+            Balls.Clear();
         }
 
     }

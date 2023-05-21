@@ -7,40 +7,41 @@ using System.Windows.Input;
 
 namespace PresentationViewModel
 {
-    public class MyViewModel : INotifyPropertyChanged
+    public class MyViewModel : ViewModelBase
     {
 
         private readonly ModelAbstractAPI modelAPI;
         private int _amountOfBalls;
+        private IList _balls;
+        private readonly int _width;
+        private readonly int _height;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        public int AmountOfBalls { 
+            get => _amountOfBalls;
+            set 
+            {
+                _amountOfBalls = value;
+                RaisePropertyChanged("AmountOfBalls");
+            } 
         }
 
-        public IList<Ball> _Balls { get; set; }
-        Random random = new Random();
-
-        public IList<Ball> Balls
+        public IList BallsList
         {
-            get => _Balls;
+            get => _balls;
             set
             {
-                _Balls = value;
+                _balls = value;
+                RaisePropertyChanged("BallsList");
             }
         }
 
-        public int AmountOfBalls { 
-            get => _amountOfBalls; 
-            set => _amountOfBalls = value; 
-        }
-
-
-        public MyViewModel()
+        public MyViewModel() : this(ModelAbstractAPI.CreateModelAPI()) { }
+        public MyViewModel(ModelAbstractAPI modelAbstractAPI)
         {
-            modelAPI = ModelAbstractAPI.CreateModelAPI(DataAbstractAPI.CreateDataAPI(15, 3, 900));
-            _Balls = getBalls();
+            modelAPI = modelAbstractAPI;
+            _height = modelAPI.Height;
+            _width = modelAPI.Width;
             ClickButton = new RelayCommand(OnClickButton);
             ExitClick = new RelayCommand(OnExitClick);
 
@@ -49,31 +50,20 @@ namespace PresentationViewModel
         public ICommand ClickButton { get; set; }
         public ICommand ExitClick { get; set; }
 
+        public int Width => _width;
+
+        public int Height => _height;
+
         private void OnClickButton()
         {
-            modelAPI.CreateBalls(_amountOfBalls);
-
-            if (modelAPI.GetBalls().Count == 0)
-            {
-                throw new NullReferenceException("Brak kuleczek :(");
-            }
-
-
-            modelAPI.TaskRun();
+            BallsList = modelAPI.CreateBalls(_amountOfBalls);
+            modelAPI.CallSimulation();
         }
 
         private void OnExitClick()
         {
-            modelAPI.TaskStop();
+            modelAPI.StopSimulation();
         }
-
-
-        public IList<Ball> getBalls()
-        {
-
-            return modelAPI.GetBalls();
-        }
-
 
     }
 }
