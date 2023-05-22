@@ -1,15 +1,17 @@
 ﻿
 using System.Collections.ObjectModel;
+using System.Numerics;
 
 namespace Data
 {
     public abstract class DataAbstractAPI
     {
-        public static DataAbstractAPI CreateDataAPI(float radious, float mass, float v)
+        public static DataAbstractAPI CreateDataAPI()
         {
-            return new DataLayer(radious, mass, v);
+            return new DataLayer();
         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 
@@ -17,32 +19,37 @@ namespace Data
         public abstract void generateBalls(int _amount);
         public abstract ObservableCollection<Ball> getBalls();
 
+=======
+        public virtual Ball GetBallData(Vector2 position, Vector2 velocity, float radius, float weight)
+        {
+            return new Ball(position, velocity, radius, weight);
+        }
+
+        public virtual Board GetBoardData(int width, int height)
+        {
+            return new Board(width, height);
+        }
+>>>>>>> 6d106460ff17b0e47a0b485241eb1c4a056a0cc2
     }
     public class DataLayer : DataAbstractAPI
     {
-        private float _ballradious;
-        private float _ballmass;
-        private float _v;
-        private Board board;
 
 
-        public DataLayer(float radious, float mass, float v)
+
+
+        public DataLayer()
         {
-
-            this._ballradious = radious;
-            this._ballmass = mass;
-            this._v = v;
-            board = new Board();
+            
         }
 
-        public override void generateBalls(int _amount)
+       /* public override Ball GetBallData(Vector2 position, Vector2 velocity, float radious, float mass)
         {
-            board.GenerateBalls(_amount, _ballradious, _ballmass, _v);
+            return new Ball(position, velocity, radious, mass);
         }
 
-        public override ObservableCollection<Ball> getBalls()
+        public override Board GetBoardData(int width, int height)
         {
-            return board.Balls;
-        }
+            return new Board(width, height);
+        }*/
     }
 }

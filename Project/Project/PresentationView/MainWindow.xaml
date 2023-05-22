@@ -14,7 +14,7 @@
     <Grid>
         <Button Content="Start" Command="{Binding ClickButton}"  HorizontalAlignment="Left" Margin="334,36,0,0" VerticalAlignment="Top" Width="86" Height="21"/>
         <Label Content="Pass an amount of balls:" HorizontalAlignment="Left" Margin="61,32,0,0" VerticalAlignment="Top"/>
-        <TextBox Text="{Binding BallsAmount}" x:Name="inputNumber"  HorizontalAlignment="Left" Height="23" Margin="203,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
+        <TextBox Text="{Binding AmountOfBalls}" x:Name="inputNumber"  HorizontalAlignment="Left" Height="23" Margin="203,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
         <Button Content="Stop" Command="{Binding ExitClick}" HorizontalAlignment="Left" Margin="481,36,0,0" VerticalAlignment="Top" Height="22" Width="77"/>
         <Rectangle
         x:Name="Rectangle"
@@ -22,9 +22,9 @@
         StrokeThickness="4"
         Canvas.Left="10"
         Canvas.Top="25" Margin="29,81,23,10"
-        Height="{Binding ViewHeight}"
-        Width="{Binding ViewWidth}"/>
-        <ItemsControl ItemsSource="{Binding _Balls,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="29,81,23,10">
+        Height="{Binding Height}"
+        Width="{Binding Width}"/>
+        <ItemsControl ItemsSource="{Binding BallsList,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="29,81,23,10">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
