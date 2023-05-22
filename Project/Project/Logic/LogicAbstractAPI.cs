@@ -69,6 +69,7 @@ namespace Logic
                         {
                             break;
                         }
+                        ball.ChangePosition();
 
                         foreach (BallService otherBall in Balls)
                         {
@@ -82,7 +83,6 @@ namespace Logic
                             }
                         }
 
-                        ball.ChangePosition();
                     }
                 });
 
@@ -132,7 +132,7 @@ namespace Logic
 
         public override void CreateBalls(int count)
         {
-            var rnd = new Random((int)DateTime.Now.Ticks);
+            var rnd = new Random();
 
             for (int i = 0; i < count; i++)
             {
