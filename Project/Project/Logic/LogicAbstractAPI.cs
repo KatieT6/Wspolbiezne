@@ -6,7 +6,8 @@ using Microsoft.VisualBasic;
 
 namespace Logic
 {
-    public abstract class LogicAbstractAPI
+    public abstract class LogicAbstractAPI //zmienic na boardAPI
+                                            // board nie jest potrzebny 
     {
         public static LogicAbstractAPI CreateLogicAPI()
         {
@@ -19,7 +20,7 @@ namespace Logic
         public abstract void RunSimulation();
         public abstract void StopSimulation();
         public abstract ObservableCollection<BallService> Balls { get; }
-        public abstract Board board { get; }
+        public abstract Board board { get; } //wysokosc i szerokosc Board zamiast Board
     }
     internal class LogicAPI : LogicAbstractAPI
     {
@@ -52,7 +53,8 @@ namespace Logic
 
             foreach (BallService ball in Balls)
             {
-                Task task = Task.Run(() =>
+                Task task = Task.Run(
+                    () =>
                 {
                     // Wait for all balls to start updating before continuing
                     //barrier.SignalAndWait();
@@ -71,11 +73,11 @@ namespace Logic
                         }
                         ball.ChangePosition();
 
-                        foreach (BallService otherBall in Balls)
+                        foreach (BallService otherBall in Balls) //w tedy kiedy piłka zmieniła pozycje
                         {
                             lock (Balls)
                             {
-                                if (ball == otherBall) continue;
+                                if (ball.Equals( otherBall)) continue; 
                                 if (ball.CollidesWith(otherBall))
                                 {
                                     ball.HandleCollision(otherBall);

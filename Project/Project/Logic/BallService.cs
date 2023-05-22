@@ -41,9 +41,10 @@ namespace Logic
             }
         }
 
-        public bool CollidesWith(BallService other)
+        public bool CollidesWith(BallService other) // ma przekazywac pozycje
         {
             Vector2 distance = new Vector2(other.X, other.Y) - new Vector2(this.X, this.Y);
+
             float separationDistance = 4; // adjust as needed
             float radiiSum = (other.Radious / 2) + (this.Radious / 2) + separationDistance;
 
@@ -60,7 +61,7 @@ namespace Logic
             this.Velocity += impulseMagnitude / this.Weight * collisionNormal;
         }
 
-        public void ChangePosition()
+        public void ChangePosition() //prywatna metoda wewnatrz Ball
         {
             _ball.Position += new Vector2(_ball.Velocity.X * _ball.Speed, _ball.Velocity.Y * _ball.Speed);
             Vector2 normal = Vector2.Zero;
