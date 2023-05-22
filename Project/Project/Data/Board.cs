@@ -5,22 +5,15 @@ namespace Data
 {
     public class Board 
     {
-        public static int _boardWidth = 750;
-        public static int _boardHeight = 400;
-
-        public Board()
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public Board(int width, int height)
         {
-           
+            Width = width;
+            Height = height;
         }
 
-        public int BoardHeight
-        {
-            get => _boardHeight;
-        }
-        public int BoardWidth
-        {
-            get => _boardWidth;
-        }
+       
         
     }
 }

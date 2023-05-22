@@ -36,7 +36,7 @@ namespace Logic
         public LogicAPI()
         {
             _dataAPI = DataAbstractAPI.CreateDataAPI();
-            Board = _dataAPI.GetBoardData();
+            Board = _dataAPI.GetBoardData(750, 400);
             BallService.SetBoardData(Board);
         }
 
@@ -138,7 +138,7 @@ namespace Logic
             {
                 float speed = 0.0005f;
                 float radius = GenerateRandomFloatInRange(rnd, 10f, 30f);
-                Vector2 pos = GenerateRandomVector2InRange(rnd, 0, Board.BoardWidth - radius, 0, Board.BoardHeight - radius);
+                Vector2 pos = GenerateRandomVector2InRange(rnd, 0, Board.Width - radius, 0, Board.Height - radius);
                 Vector2 vel = GenerateRandomVector2InRange(rnd, -speed, speed, -speed, speed);
                 Ball ballData = _dataAPI.GetBallData(pos, vel, radius, radius / 2);
                 BallService ballLogic = new BallService(ballData);

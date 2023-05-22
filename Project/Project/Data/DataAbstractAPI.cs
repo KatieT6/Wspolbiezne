@@ -12,7 +12,7 @@ namespace Data
         }
 
         public abstract Ball GetBallData(Vector2 position, Vector2 velocity, float radious, float mass);
-        public abstract Board GetBoardData();
+        public abstract Board GetBoardData(int width, int height);
 
     }
     public class DataLayer : DataAbstractAPI
@@ -31,9 +31,9 @@ namespace Data
             return new Ball(position, velocity, radious, mass);
         }
 
-        public override Board GetBoardData()
+        public override Board GetBoardData(int width, int height)
         {
-            return new Board();
+            return new Board(width, height);
         }
     }
 }

@@ -67,11 +67,11 @@ namespace Logic
 
             if (_ball.Position.X < 0)
                 normal = Vector2.UnitX;
-            else if (_ball.Position.X > _board.BoardWidth - _ball.Radious)
+            else if (_ball.Position.X > _board.Width - _ball.Radious)
                 normal = -Vector2.UnitX;
             else if (_ball.Position.Y < 0)
                 normal = Vector2.UnitY;
-            else if (_ball.Position.Y > _board.BoardHeight - _board.BoardHeight)
+            else if (_ball.Position.Y > _board.Height - _board.Height)
                 normal = -Vector2.UnitY;
 
             if (normal != Vector2.Zero)
