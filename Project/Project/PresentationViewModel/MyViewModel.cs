@@ -39,7 +39,7 @@ namespace PresentationViewModel
         public MyViewModel() : this(ModelAbstractAPI.CreateModelAPI()) { }
         public MyViewModel(ModelAbstractAPI modelAbstractAPI)
         {
-            modelAPI = modelAbstractAPI;
+            modelAPI = ModelAbstractAPI.CreateModelAPI();
             _height = modelAPI.Height;
             _width = modelAPI.Width;
             ClickButton = new RelayCommand(OnClickButton);

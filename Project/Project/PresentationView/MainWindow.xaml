@@ -22,9 +22,9 @@
         StrokeThickness="4"
         Canvas.Left="10"
         Canvas.Top="25" Margin="29,81,23,10"
-        Height="{Binding ViewHeight}"
-        Width="{Binding ViewWidth}"/>
-        <ItemsControl ItemsSource="{Binding _Balls,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="29,81,23,10">
+        Height="{Binding Height}"
+        Width="{Binding Width}"/>
+        <ItemsControl ItemsSource="{Binding BallsList,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="29,81,23,10">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>

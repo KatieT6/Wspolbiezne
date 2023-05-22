@@ -19,7 +19,7 @@ namespace Logic
         public abstract void RunSimulation();
         public abstract void StopSimulation();
         public abstract ObservableCollection<BallService> Balls { get; }
-        public abstract Board Board { get; }
+        public abstract Board board { get; }
     }
     internal class LogicAPI : LogicAbstractAPI
     {
@@ -28,7 +28,7 @@ namespace Logic
         DataAbstractAPI _dataAPI;
 
         public override ObservableCollection<BallService> Balls { get; } = new ObservableCollection<BallService>();
-        public override Board Board { get; }
+        public override Board board { get; }
 
 
 
@@ -36,8 +36,8 @@ namespace Logic
         public LogicAPI()
         {
             _dataAPI = DataAbstractAPI.CreateDataAPI();
-            Board = _dataAPI.GetBoardData(750, 400);
-            BallService.SetBoardData(Board);
+            board = _dataAPI.GetBoardData(750, 400);
+            BallService.SetBoardData(board);
         }
 
 
@@ -48,14 +48,14 @@ namespace Logic
             _cancelToken = CancellationToken.None;
 
             // Add Barrier object and set initial count to number of balls
-            Barrier barrier = new Barrier(Balls.Count);
+            //Barrier barrier = new Barrier(Balls.Count);
 
             foreach (BallService ball in Balls)
             {
                 Task task = Task.Run(() =>
                 {
                     // Wait for all balls to start updating before continuing
-                    barrier.SignalAndWait();
+                    //barrier.SignalAndWait();
 
                     while (true)
                     {
@@ -138,7 +138,7 @@ namespace Logic
             {
                 float speed = 0.0005f;
                 float radius = GenerateRandomFloatInRange(rnd, 10f, 30f);
-                Vector2 pos = GenerateRandomVector2InRange(rnd, 0, Board.Width - radius, 0, Board.Height - radius);
+                Vector2 pos = GenerateRandomVector2InRange(rnd, 0, board.Width - radius, 0, board.Height - radius);
                 Vector2 vel = GenerateRandomVector2InRange(rnd, -speed, speed, -speed, speed);
                 Ball ballData = _dataAPI.GetBallData(pos, vel, radius, radius / 2);
                 BallService ballLogic = new BallService(ballData);

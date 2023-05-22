@@ -7,7 +7,6 @@ namespace Data
     public class Ball
     {
         private Vector2 _position;
-        private float _radius;
         private Vector2 _velocity;
         private float _speed = 1500;
         private float _radious;
