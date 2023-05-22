@@ -25,12 +25,17 @@ namespace LogicTest.UnitTest
             int _amount = 10;
             int _radius = 25;
 <<<<<<< HEAD
+<<<<<<< HEAD
             api.TaskRun();
             Assert.AreEqual(api.getBalls().Count, _amount);
 =======
             api.RunSimulation();
             Assert.That(api.Balls().Count, Is.EqualTo(_amount));
 >>>>>>> 6d106460ff17b0e47a0b485241eb1c4a056a0cc2
+=======
+            api.RunSimulation();
+            Assert.That(api.Balls().Count, Is.EqualTo(_amount));
+>>>>>>> 0b804d85db8e0efae133ece25bf13c7571717499
 
             foreach (Ball ball in data.getBalls())
             {

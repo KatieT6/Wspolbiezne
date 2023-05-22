@@ -40,7 +40,7 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Ellipse Width="25" Height="25" Fill="Blue"/>
+                    <Ellipse Width="{Binding Radious}" Height="{Binding Radious}" Fill="Blue"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

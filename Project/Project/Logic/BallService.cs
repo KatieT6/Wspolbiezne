@@ -44,7 +44,11 @@ namespace Logic
         public bool CollidesWith(BallService other)
         {
             Vector2 distance = new Vector2(other.X, other.Y) - new Vector2(this.X, this.Y);
+<<<<<<< HEAD
             float separationDistance = 2; // adjust as needed
+=======
+            float separationDistance = 4; // adjust as needed
+>>>>>>> 0b804d85db8e0efae133ece25bf13c7571717499
             float radiiSum = (other.Radious / 2) + (this.Radious / 2) + separationDistance;
 
             return distance.LengthSquared() <= radiiSum * radiiSum;
