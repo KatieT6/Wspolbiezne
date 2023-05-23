@@ -22,7 +22,6 @@ namespace Data
 
 
 
-        //public abstract BoardData GetBoardData(int width, int height);
 
         public class DataLayer : DataAbstractAPI
         {
@@ -40,10 +39,7 @@ namespace Data
                 return new BallData(position, velocity, radious, mass);
             }
 
-           /* public override BoardData GetBoardData(int width, int height)
-            {
-                return new BoardData(width, height);
-            }*/
+
         }
     }
 }

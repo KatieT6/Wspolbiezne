@@ -7,15 +7,14 @@ using Microsoft.VisualBasic;
 
 namespace Logic
 {
-    public abstract class LogicAbstractAPI //zmienic na boardAPI
-                                            // board nie jest potrzebny 
+    public abstract class LogicAbstractAPI 
+                                             
     {
         public static LogicAbstractAPI CreateLogicAPI()
         {
             return new LogicAPI();
         }
 
-        //public abstract BallService CreateBall(Vector2 position, int radius);
         public abstract void CreateBalls(int count);
         public abstract void DeleteBalls();
         public abstract void RunSimulation();
@@ -70,19 +69,7 @@ namespace Logic
                         }
 
                         ballService.UpdatePosition();
-
-                        /*foreach (BallService otherBall in Balls) 
-                        {
-                            lock (Balls)
-                            {
-                                if (ballService.Equals( otherBall)) continue; 
-                                if (ballService.CollidesWith(otherBall))
-                                {
-                                    ballService.HandleCollision(otherBall);
-                                }
-                            }
-                        }*/
-
+ 
                     }
                 });
 
@@ -132,8 +119,8 @@ namespace Logic
                 {
                     foreach (BallService otherBall in Balls)
                     {
-                          if (ballSender.Equals(otherBall)) continue;
-                            if (ballSender.CollidesWith(otherBall))
+                        if (ballSender.Equals(otherBall)) continue;
+                        if (ballSender.CollidesWith(otherBall))
                             {
                             ballSender.HandleCollision(otherBall);
                             }

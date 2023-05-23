@@ -106,15 +106,12 @@ namespace Data
         }
 
         
+        
         public void UpdatePosition()
         {
             ChangePosition();
         }
 
-        public void RunSimulation()
-        {
-
-        }
 
         protected virtual void RaisePropertyChanged(params string[] propertyNames)
         {
