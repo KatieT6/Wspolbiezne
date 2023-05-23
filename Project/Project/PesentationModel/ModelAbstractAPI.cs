@@ -24,8 +24,8 @@ namespace PresentationModel
     public class ModelAPI : ModelAbstractAPI
     {
         private readonly LogicAbstractAPI logicAPI;
-        public override int Width => logicAPI.board.Width;
-        public override int Height => logicAPI.board.Height;
+        public override int Width => logicAPI.GetBoardWidth();
+        public override int Height => logicAPI.GetBoardHeight();
 
         public ModelAPI() : this(LogicAbstractAPI.CreateLogicAPI()) { }
 

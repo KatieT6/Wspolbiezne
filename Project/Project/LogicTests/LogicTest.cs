@@ -63,7 +63,7 @@ namespace PresentationModel.Tests
             public bool StopSimulationCalled { get; set; }
             public override ObservableCollection<BallService> Balls { get; } = new ObservableCollection<BallService>();
 
-            public override Board board => new Board(500, 500);
+            //public override BoardData board => new BoardData(500, 500);
 
             public override BallService CreateBall(Vector2 pos, int radius)
             {
@@ -74,7 +74,7 @@ namespace PresentationModel.Tests
             {
                 for (int i = 0; i < count; i++)
                 {
-                    Balls.Add(new BallService(new Ball(Vector2.Zero, Vector2.Zero, 0, 0))); ;
+                    Balls.Add(new BallService(new BallData(Vector2.Zero, Vector2.Zero, 0, 0))); ;
                 }
             }
 

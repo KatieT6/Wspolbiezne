@@ -13,23 +13,23 @@ namespace Logic
     public class BallService : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private readonly Ball _ball;
-        private static Board _board;
+        private readonly BallData _ball;
+        //private static BoardData _board;
 
-        public BallService(Ball ball)
+        public BallService(BallData ball)
         {
             _ball = ball;
         }
 
-        public static void SetBoardData(Board board)
+        /*public static void SetBoardData(BoardData board)
         {
             _board = board;
-        }
+        }*/
 
         public float X => _ball.Position.X;
         public float Y => _ball.Position.Y;
-        public float Radious => _ball.Radious;
-        public float Weight => _ball.Mass;
+        public float Radius => _ball.Radius;
+        public float Mass => _ball.Mass;
 
         public Vector2 Velocity
         {
@@ -41,55 +41,47 @@ namespace Logic
             }
         }
 
-        public bool CollidesWith(BallService other) // ma przekazywac pozycje
+        public ObservableCollection<BallService> Balls { get; } = new ObservableCollection<BallService>();
+
+        public bool CollidesWith(BallService other)
         {
-            Vector2 distance = new Vector2(other.X, other.Y) - new Vector2(this.X, this.Y);
-
-            float separationDistance = 4; // adjust as needed
-            float radiiSum = (other.Radious / 2) + (this.Radious / 2) + separationDistance;
-
-            return distance.LengthSquared() <= radiiSum * radiiSum;
+            Vector2 distance = new Vector2(X, Y) - new Vector2(other.X, other.Y);
+            float sumRadii = Radius + other.Radius;
+            return distance.LengthSquared() <= sumRadii * sumRadii;
         }
 
         public void HandleCollision(BallService other)
         {
-            Vector2 collisionNormal = Vector2.Normalize(new Vector2(other.X, other.Y) - new Vector2(this.X, this.Y));
-            Vector2 relativeVelocity = other.Velocity - this.Velocity;
-            float impulseMagnitude = 2 * this.Weight * other.Weight * Vector2.Dot(relativeVelocity, collisionNormal) / (this.Weight + other.Weight);
+            Vector2 collisionNormal = Vector2.Normalize(new Vector2(other.X, other.Y) - new Vector2(X, Y));
+            Vector2 relativeVelocity = other.Velocity - Velocity;
+            float impulseMagnitude = 2 * Mass * other.Mass * Vector2.Dot(relativeVelocity, collisionNormal) / (Mass + other.Mass);
 
-            other.Velocity -= impulseMagnitude / other.Weight * collisionNormal;
-            this.Velocity += impulseMagnitude / this.Weight * collisionNormal;
+            other.Velocity -= impulseMagnitude / other.Mass * collisionNormal;
+            Velocity += impulseMagnitude / Mass * collisionNormal;
         }
 
-        public void ChangePosition() //prywatna metoda wewnatrz Ball
+        public void UpdatePosition()
         {
-            _ball.Position += new Vector2(_ball.Velocity.X * _ball.Speed, _ball.Velocity.Y * _ball.Speed);
-            Vector2 normal = Vector2.Zero;
+            _ball.UpdatePosition();
 
-            if (_ball.Position.X < 0)
-                normal = Vector2.UnitX;
-            else if (_ball.Position.X > _board.Width - _ball.Radious)
-                normal = -Vector2.UnitX;
-            else if (_ball.Position.Y < 0)
-                normal = Vector2.UnitY;
-            else if (_ball.Position.Y > _board.Height - _board.Height)
-                normal = -Vector2.UnitY;
+            RaisePropertyChanged(nameof(X), nameof(Y));
 
-            if (normal != Vector2.Zero)
-                _ball.Velocity = Vector2.Reflect(_ball.Velocity, normal);
-
-            RaisePropertyChanged(nameof(X));
-            RaisePropertyChanged(nameof(Y));
         }
 
-        protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+
+        protected virtual void RaisePropertyChanged(params string[] propertyNames)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            //wywolujemy wszystkie metody ktore zostały do tej zmiennej podstawione;
-            //parametry zgodne z tym;
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                foreach (string propertyName in propertyNames)
+                {
+                    handler(this, new PropertyChangedEventArgs(propertyName));
+                }
+            }
         }
 
-       
+
     }
 
 

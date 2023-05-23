@@ -19,8 +19,10 @@ namespace Logic
         public abstract void DeleteBalls();
         public abstract void RunSimulation();
         public abstract void StopSimulation();
+        public abstract int GetBoardHeight();
+        public abstract int GetBoardWidth();
         public abstract ObservableCollection<BallService> Balls { get; }
-        public abstract Board board { get; } //wysokosc i szerokosc Board zamiast Board
+        //public abstract BoardData board { get; } //wysokosc i szerokosc Board zamiast Board
     }
     internal class LogicAPI : LogicAbstractAPI
     {
@@ -29,7 +31,7 @@ namespace Logic
         DataAbstractAPI _dataAPI;
 
         public override ObservableCollection<BallService> Balls { get; } = new ObservableCollection<BallService>();
-        public override Board board { get; }
+        //public override BoardData board { get; }
 
 
 
@@ -37,8 +39,8 @@ namespace Logic
         public LogicAPI()
         {
             _dataAPI = DataAbstractAPI.CreateDataAPI();
-            board = _dataAPI.GetBoardData(750, 400);
-            BallService.SetBoardData(board);
+            //board = _dataAPI.GetBoardData(750, 400);
+           // BallService.SetBoardData(board);
         }
 
 
@@ -51,13 +53,12 @@ namespace Logic
             // Add Barrier object and set initial count to number of balls
             //Barrier barrier = new Barrier(Balls.Count);
 
-            foreach (BallService ball in Balls)
+            foreach (BallService ballService in Balls)
             {
                 Task task = Task.Run(
                     () =>
                 {
-                    // Wait for all balls to start updating before continuing
-                    //barrier.SignalAndWait();
+                    
 
                     while (true)
                     {
@@ -71,16 +72,16 @@ namespace Logic
                         {
                             break;
                         }
-                        ball.ChangePosition();
+                        ballService.UpdatePosition();
 
                         foreach (BallService otherBall in Balls) //w tedy kiedy piłka zmieniła pozycje
                         {
                             lock (Balls)
                             {
-                                if (ball.Equals( otherBall)) continue; 
-                                if (ball.CollidesWith(otherBall))
+                                if (ballService.Equals( otherBall)) continue; 
+                                if (ballService.CollidesWith(otherBall))
                                 {
-                                    ball.HandleCollision(otherBall);
+                                    ballService.HandleCollision(otherBall);
                                 }
                             }
                         }
@@ -125,7 +126,7 @@ namespace Logic
 
         public override BallService CreateBall(Vector2 position, int radius)
         {
-            Ball ball = _dataAPI.GetBallData(position, new Vector2((float)0.0034, (float)0.0034), radius, radius / 2);
+            BallData ball = _dataAPI.GetBallData(position, new Vector2((float)0.0034, (float)0.0034), radius, radius / 2);
             BallService ballLogic = new BallService(ball);
             Balls.Add(ballLogic);
 
@@ -140,9 +141,9 @@ namespace Logic
             {
                 float speed = 0.0005f;
                 float radius = GenerateRandomFloatInRange(rnd, 10f, 30f);
-                Vector2 pos = GenerateRandomVector2InRange(rnd, 0, board.Width - radius, 0, board.Height - radius);
+                Vector2 pos = GenerateRandomVector2InRange(rnd, 0, DataAbstractAPI.BoardWidth - radius, 0, DataAbstractAPI.BoardHeight - radius);
                 Vector2 vel = GenerateRandomVector2InRange(rnd, -speed, speed, -speed, speed);
-                Ball ballData = _dataAPI.GetBallData(pos, vel, radius, radius / 2);
+                BallData ballData = _dataAPI.GetBallData(pos, vel, radius, radius / 2);
                 BallService ballLogic = new BallService(ballData);
                 Balls.Add(ballLogic);
             }
@@ -153,5 +154,14 @@ namespace Logic
             Balls.Clear();
         }
 
+        public override int GetBoardHeight()
+        {
+            return DataAbstractAPI.BoardHeight;
+        }
+
+        public override int GetBoardWidth()
+        {
+            return DataAbstractAPI.BoardWidth;
+        }
     }
 }
