@@ -14,7 +14,7 @@ namespace Logic
             return new LogicAPI();
         }
 
-        public abstract BallService CreateBall(Vector2 position, int radius);
+        //public abstract BallService CreateBall(Vector2 position, int radius);
         public abstract void CreateBalls(int count);
         public abstract void DeleteBalls();
         public abstract void RunSimulation();
@@ -62,7 +62,7 @@ namespace Logic
 
                     while (true)
                     {
-                        Thread.Sleep(5);
+                        Thread.Sleep(4);
 
                         try
                         {
@@ -124,14 +124,14 @@ namespace Logic
 
         #endregion
 
-        public override BallService CreateBall(Vector2 position, int radius)
+        /*public override BallService CreateBall(Vector2 position, int radius)
         {
             BallData ball = _dataAPI.GetBallData(position, new Vector2((float)0.0034, (float)0.0034), radius, radius / 2);
             BallService ballLogic = new BallService(ball);
             Balls.Add(ballLogic);
 
             return ballLogic;
-        }
+        }*/
 
         public override void CreateBalls(int count)
         {

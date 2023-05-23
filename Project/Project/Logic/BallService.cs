@@ -14,22 +14,20 @@ namespace Logic
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private readonly BallData _ball;
-        //private static BoardData _board;
+        
 
         public BallService(BallData ball)
         {
             _ball = ball;
         }
 
-        /*public static void SetBoardData(BoardData board)
-        {
-            _board = board;
-        }*/
+
 
         public float X => _ball.Position.X;
         public float Y => _ball.Position.Y;
         public float Radius => _ball.Radius;
         public float Mass => _ball.Mass;
+        public float Diameter => _ball.Radius * 2;
 
         public Vector2 Velocity
         {
@@ -62,7 +60,8 @@ namespace Logic
 
         public void UpdatePosition()
         {
-            _ball.UpdatePosition();
+
+            _ball.RunTask();
 
             RaisePropertyChanged(nameof(X), nameof(Y));
 

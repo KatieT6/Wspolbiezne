@@ -21,6 +21,7 @@ namespace Data
             _radius = radious;
             _mass = mass;
             _velocity = velocity;
+
         }
 
 
@@ -73,22 +74,22 @@ namespace Data
         private void ChangePosition()
         {
             Position += new Vector2(_velocity.X * _speed, _velocity.Y * _speed);
-            if (_position.X + 5 <= 0)
+            if (_position.X - 5 <= 0)
             {
                 _velocity = new Vector2(-Velocity.X, Velocity.Y);
                 X += 4 * _velocity.X * _speed;
             }
-            if (_position.X >= DataAbstractAPI.BoardWidth - _radius)
+            if (_position.X  >= DataAbstractAPI.BoardWidth - _radius*2)
             {
                 _velocity = new Vector2(-Velocity.X, Velocity.Y);
                 X += 4 * _velocity.X * _speed;
             }
-            if (_position.Y + 5 <= 0)
+            if (_position.Y - 5 <= 0)
             {
                 _velocity = new Vector2(Velocity.X, -Velocity.Y);
                 Y += 4 * _velocity.Y * _speed;
             }
-            if (_position.Y >= DataAbstractAPI.BoardHeight - _radius)
+            if (_position.Y >= DataAbstractAPI.BoardHeight - _radius*2)
             {
                 _velocity = new Vector2(Velocity.X, -Velocity.Y);
                 Y += 4 * _velocity.Y * _speed;
@@ -96,16 +97,35 @@ namespace Data
 
             lock (_lockObj)
             {
-                RaisePropertyChanged(nameof(X), nameof(Y));
+                RaisePropertyChanged(nameof(Position));
+
             }
 
             Task.Delay(4);
         }
 
-        public void UpdatePosition()
+
+        public void RunTask()
+        {
+            bool isRunning;
+            Task.Run(() =>
+            {
+                isRunning = true;
+
+                while(true) 
+                {
+                    lock (this) 
+                    { 
+                        ChangePosition();
+                    }
+                    //Task.Delay(5);
+                }
+            });
+        }
+        /*public void UpdatePosition()
         {
             ChangePosition();
-        }
+        }*/
 
 
 
