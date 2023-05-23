@@ -159,6 +159,7 @@ namespace Logic
                 Vector2 vel = GenerateRandomVector2InRange(rnd, -speed, speed, -speed, speed);
                 BallData ballData = _dataAPI.GetBallData(pos, vel, radius, radius / 2);
                 BallService ballLogic = new BallService(ballData);
+
                 Balls.Add(ballLogic);
                 ballLogic.PropertyChanged += BallLogic_PropertyChanged;
             }

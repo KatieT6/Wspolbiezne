@@ -111,7 +111,10 @@ namespace Data
             ChangePosition();
         }
 
+        public void RunSimulation()
+        {
 
+        }
 
         protected virtual void RaisePropertyChanged(params string[] propertyNames)
         {

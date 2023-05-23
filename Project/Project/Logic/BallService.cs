@@ -42,20 +42,21 @@ namespace Logic
 
         public bool CollidesWith(BallService other)
         {
-            Vector2 distance = new Vector2(X , Y ) - new Vector2(other.X , other.Y );
+            Vector2 distance = new Vector2(X + Radius, Y + Radius) - new Vector2(other.X + other.Radius, other.Y + other.Radius);
             float sumRadii = Radius + other.Radius;
             return distance.LengthSquared() <= sumRadii * sumRadii;
         }
 
         public void HandleCollision(BallService other)
         {
-            Vector2 collisionNormal = Vector2.Normalize(new Vector2(other.X , other.Y ) - new Vector2(X , Y ));
+            Vector2 collisionNormal = Vector2.Normalize(new Vector2(other.X + other.Radius, other.Y + other.Radius) - new Vector2(X + Radius, Y + Radius));
             Vector2 relativeVelocity = other.Velocity - Velocity;
             float impulseMagnitude = 2 * Mass * other.Mass * Vector2.Dot(relativeVelocity, collisionNormal) / (Mass + other.Mass);
 
             other.Velocity -= impulseMagnitude / other.Mass * collisionNormal;
             Velocity += impulseMagnitude / Mass * collisionNormal;
         }
+        
 
         public void UpdatePosition()
         {
