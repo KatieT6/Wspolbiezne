@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Numerics;
 using System.Threading;
 using Data;
@@ -22,7 +23,6 @@ namespace Logic
         public abstract int GetBoardHeight();
         public abstract int GetBoardWidth();
         public abstract ObservableCollection<BallService> Balls { get; }
-        //public abstract BoardData board { get; } //wysokosc i szerokosc Board zamiast Board
     }
     internal class LogicAPI : LogicAbstractAPI
     {
@@ -31,7 +31,6 @@ namespace Logic
         DataAbstractAPI _dataAPI;
 
         public override ObservableCollection<BallService> Balls { get; } = new ObservableCollection<BallService>();
-        //public override BoardData board { get; }
 
 
 
@@ -39,8 +38,7 @@ namespace Logic
         public LogicAPI()
         {
             _dataAPI = DataAbstractAPI.CreateDataAPI();
-            //board = _dataAPI.GetBoardData(750, 400);
-           // BallService.SetBoardData(board);
+
         }
 
 
@@ -50,8 +48,6 @@ namespace Logic
 
             _cancelToken = CancellationToken.None;
 
-            // Add Barrier object and set initial count to number of balls
-            //Barrier barrier = new Barrier(Balls.Count);
 
             foreach (BallService ballService in Balls)
             {
@@ -72,9 +68,10 @@ namespace Logic
                         {
                             break;
                         }
+
                         ballService.UpdatePosition();
 
-                        foreach (BallService otherBall in Balls) //w tedy kiedy piłka zmieniła pozycje
+                        /*foreach (BallService otherBall in Balls) 
                         {
                             lock (Balls)
                             {
@@ -84,7 +81,7 @@ namespace Logic
                                     ballService.HandleCollision(otherBall);
                                 }
                             }
-                        }
+                        }*/
 
                     }
                 });
@@ -124,14 +121,31 @@ namespace Logic
 
         #endregion
 
-        /*public override BallService CreateBall(Vector2 position, int radius)
+        object _lock = new object();
+        public void BallLogic_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            BallData ball = _dataAPI.GetBallData(position, new Vector2((float)0.0034, (float)0.0034), radius, radius / 2);
-            BallService ballLogic = new BallService(ball);
-            Balls.Add(ballLogic);
+            if (sender == null) return;
+            BallService ballSender = (BallService)sender;
+            if (e.PropertyName == "X" || e.PropertyName == "Y")
+            {
+                lock (_lock)
+                {
+                    foreach (BallService otherBall in Balls)
+                    {
+                          if (ballSender.Equals(otherBall)) continue;
+                            if (ballSender.CollidesWith(otherBall))
+                            {
+                            ballSender.HandleCollision(otherBall);
+                            }
+                    }
+                    
+                }
+            }
+        }
 
-            return ballLogic;
-        }*/
+
+        
+
 
         public override void CreateBalls(int count)
         {
@@ -146,6 +160,7 @@ namespace Logic
                 BallData ballData = _dataAPI.GetBallData(pos, vel, radius, radius / 2);
                 BallService ballLogic = new BallService(ballData);
                 Balls.Add(ballLogic);
+                ballLogic.PropertyChanged += BallLogic_PropertyChanged;
             }
         }
 

@@ -39,18 +39,17 @@ namespace Logic
             }
         }
 
-        public ObservableCollection<BallService> Balls { get; } = new ObservableCollection<BallService>();
 
         public bool CollidesWith(BallService other)
         {
-            Vector2 distance = new Vector2(X, Y) - new Vector2(other.X, other.Y);
+            Vector2 distance = new Vector2(X , Y ) - new Vector2(other.X , other.Y );
             float sumRadii = Radius + other.Radius;
             return distance.LengthSquared() <= sumRadii * sumRadii;
         }
 
         public void HandleCollision(BallService other)
         {
-            Vector2 collisionNormal = Vector2.Normalize(new Vector2(other.X, other.Y) - new Vector2(X, Y));
+            Vector2 collisionNormal = Vector2.Normalize(new Vector2(other.X , other.Y ) - new Vector2(X , Y ));
             Vector2 relativeVelocity = other.Velocity - Velocity;
             float impulseMagnitude = 2 * Mass * other.Mass * Vector2.Dot(relativeVelocity, collisionNormal) / (Mass + other.Mass);
 
@@ -61,7 +60,7 @@ namespace Logic
         public void UpdatePosition()
         {
 
-            _ball.RunTask();
+            _ball.UpdatePosition();
 
             RaisePropertyChanged(nameof(X), nameof(Y));
 

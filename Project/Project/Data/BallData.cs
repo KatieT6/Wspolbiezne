@@ -13,6 +13,7 @@ namespace Data
         private float _speed = 1500;
         private float _radius;
         private float _mass;
+        private bool _move = true;
 
 
         public BallData(Vector2 position, Vector2 velocity, float radious, float mass)
@@ -21,14 +22,17 @@ namespace Data
             _radius = radious;
             _mass = mass;
             _velocity = velocity;
-
         }
 
 
         public Vector2 Position
         {
             get => _position;
-            set => _position = value;
+            set
+            {
+                _position = value;
+                RaisePropertyChanged();
+            }
         }
 
         public Vector2 Velocity
@@ -74,58 +78,38 @@ namespace Data
         private void ChangePosition()
         {
             Position += new Vector2(_velocity.X * _speed, _velocity.Y * _speed);
-            if (_position.X - 5 <= 0)
+            if (_position.X - 5 <= 0 && + _velocity.X < 0)
             {
                 _velocity = new Vector2(-Velocity.X, Velocity.Y);
                 X += 4 * _velocity.X * _speed;
             }
-            if (_position.X  >= DataAbstractAPI.BoardWidth - _radius*2)
+            if (_position.X  >= DataAbstractAPI.BoardWidth - _radius*2 && _velocity.X > 0)
             {
                 _velocity = new Vector2(-Velocity.X, Velocity.Y);
                 X += 4 * _velocity.X * _speed;
             }
-            if (_position.Y - 5 <= 0)
+            if (_position.Y - 5 <= 0 && _velocity.Y < 0)
             {
                 _velocity = new Vector2(Velocity.X, -Velocity.Y);
                 Y += 4 * _velocity.Y * _speed;
             }
-            if (_position.Y >= DataAbstractAPI.BoardHeight - _radius*2)
+            if (_position.Y >= DataAbstractAPI.BoardHeight - _radius*2 && _velocity.Y > 0)
             {
                 _velocity = new Vector2(Velocity.X, -Velocity.Y);
                 Y += 4 * _velocity.Y * _speed;
             }
 
-            lock (_lockObj)
-            {
+
                 RaisePropertyChanged(nameof(Position));
 
-            }
 
-            Task.Delay(4);
         }
 
-
-        public void RunTask()
-        {
-            bool isRunning;
-            Task.Run(() =>
-            {
-                isRunning = true;
-
-                while(true) 
-                {
-                    lock (this) 
-                    { 
-                        ChangePosition();
-                    }
-                    //Task.Delay(5);
-                }
-            });
-        }
-        /*public void UpdatePosition()
+        
+        public void UpdatePosition()
         {
             ChangePosition();
-        }*/
+        }
 
 
 

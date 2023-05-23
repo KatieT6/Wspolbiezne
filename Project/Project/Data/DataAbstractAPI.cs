@@ -10,7 +10,7 @@ namespace Data
         private static int boardWidth = 750;
         private static int _boardHeight = 400;
 
-        public static int BoardWidth { get => boardWidth; }a
+        public static int BoardWidth { get => boardWidth; }
         public static int BoardHeight { get => _boardHeight; }
 
         public static DataAbstractAPI CreateDataAPI()
