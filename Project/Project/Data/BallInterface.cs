@@ -4,14 +4,14 @@ namespace Data
 {
     public interface BallInterface : IDisposable
     {
-        int id { get; }
-        int diameter { get; }
+        int Id { get; }
+        int Diameter { get; }
 
 
-        Vector2 position { get; }
-        Vector2 velocity { get; }
+        Vector2 Position { get; }
+        Vector2 Velocity { get; }
 
-        int mass { get; }
+        int Mass { get; }
 
         event EventHandler? BallChanged;
     }
