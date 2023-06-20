@@ -29,6 +29,7 @@ namespace Data
 
         internal class DataLayer : DataAbstractAPI
         {
+            private Logger logger;
             private List<BallInterface> _balls;
             private readonly Random _random = new Random();
             public override int BoardWidth { get; }
@@ -54,6 +55,7 @@ namespace Data
 
             public override void CreateBalls(int count)
             {
+                logger = new Logger();
                 for (int i = 0; i < count; i++)
                 {
                     float velX = (float)((_random.NextDouble() - 0.5) / 2);
@@ -71,6 +73,7 @@ namespace Data
                     float ballY = (float)(_random.Next(15 + diameter, BoardHeight - diameter - 15) + _random.NextDouble());
 
                     BallData ball = new BallData(ballX, ballY, ballMass, vel, diameter, i);
+                    ball.BallChanged += (object? sender, EventArgs args) => logger.AddBallToQueue((BallInterface)sender);
                     _balls.Add(ball);
                 }
             }
@@ -82,6 +85,7 @@ namespace Data
                     ball.Dispose();
                 }
                 _balls.Clear();
+                logger.Dispose();
             }
         }
     }

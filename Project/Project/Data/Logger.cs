@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Data
@@ -14,6 +15,7 @@ namespace Data
         private Task loggerTask;
         private StreamWriter streamWriter;
         BlockingCollection<BallDataToSerialize> _queue;
+        private string path = Directory.GetCurrentDirectory();
 
         public Logger()
         {
@@ -24,6 +26,21 @@ namespace Data
 
         private void WriteToFile()
         {
+            
+            using (streamWriter = new StreamWriter(path + "/balls.txt", append: false))
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions();
+                options.WriteIndented = true;
+                foreach (BallDataToSerialize b in _queue.GetConsumingEnumerable())
+                {
+                    string ballLog = JsonSerializer.Serialize(b, options);
+                    streamWriter.Write("\n" + ballLog);
+                    streamWriter.Write("\n");
+                }
+                streamWriter.Write("\n");
+                streamWriter.Flush();
+
+            }
 
         }
 
@@ -34,8 +51,12 @@ namespace Data
                 return;
             }
 
-            BallData ballToAdd = new BallData(ball.Position.X, ball.Position.Y, ball.Mass, ball.Velocity, ball.Diameter, ball.Id);
-            
+            BallDataToSerialize ballToAdd = new BallDataToSerialize(ball.Position, ball.Mass, ball.Velocity, ball.Diameter, ball.Id);
+            if (!_queue.IsAddingCompleted)
+            {
+                _queue.Add(ballToAdd);
+            }
+
         }
 
 
@@ -53,26 +74,23 @@ namespace Data
                 X = Position.X;
                 Y = Position.Y;
                 Mass = mass;
-                VelyX = Velocity.X;
+                VelX = Velocity.X;
                 VelY = Velocity.Y;
                 Diameter = diameter;
                 ID = iD;
                 Time = DateTime.UtcNow.ToString("G");
-            }   //Format "G" jest domyślnym formatem dla ToString() w przypadku typu DateTime
-                //i wygeneruje ciąg znaków reprezentujący datę i czas w lokalnej strefie czasowej
-                //w formacie akceptowalnym dla bieżącej kultury.
-            //Natomiast DateTime.UtcNow zwraca aktualną datę i czas w strefie czasowej UTC
-            //(czas uniwersalny skoordynowany), który jest niezależny od lokalnej strefy czasowej.
+            }   
 
             public float X { get; set; }
             public float Y { get; set; }
             public int Mass { get; set; } 
-            public float VelyX { get; set; }
+            public float VelX { get; set; }
             public float VelY { get; set; }
             public int Diameter { get; set; }
             public int ID { get; set; }
             public string Time { get; set; }
         }
+
 
     }
 }
