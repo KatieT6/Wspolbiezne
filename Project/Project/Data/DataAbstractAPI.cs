@@ -67,10 +67,10 @@ namespace Data
                     Vector2 vel = new Vector2(velX, velY);
                     int diameter = _random.Next(15, 30);
                     int ballMass = diameter * 2;
-                    float ballX = (float)(_random.Next(20 + diameter, Width - diameter - 20) + _random.NextDouble());
-                    float ballY = (float)(_random.Next(20 + diameter, Height - diameter - 20) + _random.NextDouble());
+                    float ballX = (float)(_random.Next(20 + diameter, _boardWidth - diameter - 20) + _random.NextDouble());
+                    float ballY = (float)(_random.Next(20 + diameter, _boardHeight - diameter - 20) + _random.NextDouble());
 
-                    Ball ball = new Ball(ballX, ballY, ballMass, vel, diameter, i);
+                    BallData ball = new BallData(ballX, ballY, ballMass, vel, diameter, i);
                     _balls.Add(ball);
                 }
             }
