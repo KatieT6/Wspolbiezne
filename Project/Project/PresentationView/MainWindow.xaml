@@ -19,11 +19,11 @@
         <Rectangle
         x:Name="Rectangle"
         Stroke="Black" 
-        StrokeThickness="4"
+        StrokeThickness="5"
         Canvas.Left="10"
         Canvas.Top="25" Margin="29,81,23,10"
-        Height="{Binding Height}"
-        Width="{Binding Width}"/>
+        Height="{Binding BoardHeight}"
+        Width="{Binding BoardWidth}"/>
         <ItemsControl ItemsSource="{Binding BallsCollection,UpdateSourceTrigger=PropertyChanged}" Margin="29,81,23,10">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -37,8 +37,8 @@
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemContainerStyle>
                 <Style TargetType="ContentPresenter">
-                    <Setter Property="Canvas.Left" Value="{Binding Top}" />
-                    <Setter Property="Canvas.Top" Value="{Binding Left}" />
+                    <Setter Property="Canvas.Left" Value="{Binding Left}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Top}" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
             

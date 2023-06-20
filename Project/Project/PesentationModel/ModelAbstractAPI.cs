@@ -11,9 +11,9 @@ namespace PresentationModel
         public abstract int Width { get; }
         public abstract int Height { get; }
 
-        public static ModelAbstractAPI CreateModelAPI(LogicAbstractAPI logicAPI = default(LogicAbstractAPI))
+        public static ModelAbstractAPI CreateModelAPI(int w, int h)
         {
-            return new ModelAPI(logicAPI);
+            return new ModelAPI(w, h);
         }
 
         public abstract void AddBalls(int amount);
@@ -24,14 +24,14 @@ namespace PresentationModel
     public class ModelAPI : ModelAbstractAPI
     {
         private readonly LogicAbstractAPI logicAPI;
-        public override int Width => logicAPI.GetBoardWidth();
-        public override int Height => logicAPI.GetBoardHeight();
+        public override int Width { get; }
+        public override int Height { get; }
 
-        public ModelAPI() : this(LogicAbstractAPI.CreateLogicAPI()) { }
-
-        public ModelAPI(LogicAbstractAPI logicApi)
+        public ModelAPI(int w, int h)
         {
-            logicAPI = logicApi ?? LogicAbstractAPI.CreateLogicAPI();
+            Width = w;
+            Height = h;
+            logicAPI = LogicAbstractAPI.CreateLogicAPI(w,h);
             Balls = new ObservableCollection<BallModel>();
             logicAPI.LogicEvent += UpdateBall;
         }

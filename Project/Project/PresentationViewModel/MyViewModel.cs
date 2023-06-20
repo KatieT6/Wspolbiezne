@@ -15,8 +15,8 @@ namespace PresentationViewModel
         private readonly ModelAbstractAPI modelAPI;
         private int _amountOfBalls;
         /*private IList _balls;*/
-        private readonly int _width;
-        private readonly int _height;
+        private readonly int _boardWidth = 750;
+        private readonly int _boardHeight = 400;
         public ObservableCollection<BallModel> BallsCollection { get; }
 
 
@@ -29,22 +29,10 @@ namespace PresentationViewModel
             } 
         }
 
-        /*public IList BallsList
-        {
-            get => _balls;
-            set
-            {
-                _balls = value;
-                RaisePropertyChanged("BallsList");
-            }
-        }*/
 
-        public MyViewModel() : this(ModelAbstractAPI.CreateModelAPI()) { }
-        public MyViewModel(ModelAbstractAPI modelAbstractAPI)
+        public MyViewModel()
         {
-            modelAPI = ModelAbstractAPI.CreateModelAPI();
-            _height = modelAPI.Height;
-            _width = modelAPI.Width;
+            modelAPI = ModelAbstractAPI.CreateModelAPI(_boardWidth, _boardHeight);
             ClickButton = new RelayCommand(OnClickButton);
             ExitClick = new RelayCommand(OnExitClick);
             BallsCollection = modelAPI.Balls;
@@ -53,9 +41,9 @@ namespace PresentationViewModel
         public ICommand ClickButton { get; set; }
         public ICommand ExitClick { get; set; }
 
-        public int Width => _width;
+        public int BoardWidth => _boardWidth;
 
-        public int Height => _height;
+        public int BoardHeight => _boardHeight;
 
         private void OnClickButton()
         {

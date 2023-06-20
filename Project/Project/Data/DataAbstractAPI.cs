@@ -8,15 +8,15 @@ namespace Data
 {
     public abstract class DataAbstractAPI
     {
-        public static int _boardWidth = 750;
-        public static int _boardHeight = 400;
+/*        public static int _boardWidth = 750;
+        public static int _boardHeight = 400;*/
 
-        public static int BoardWidth { get; }
-        public static int BoardHeight { get; }
+        public abstract int BoardWidth { get; }
+        public abstract int BoardHeight { get; }
 
-        public static DataAbstractAPI CreateDataAPI()
+        public static DataAbstractAPI CreateDataAPI(int w, int h)
         {
-            return new DataLayer();
+            return new DataLayer(w, h);
         }
 
         public abstract int GetBallAmount();
@@ -26,20 +26,19 @@ namespace Data
 
         //public abstract BallData GetBallData(Vector2 position, Vector2 velocity, float radius, float weight);
 
-        public static DataAbstractAPI CreateAPI()
-        {
-            return new DataLayer();
-        }
-
 
         internal class DataLayer : DataAbstractAPI
         {
             private List<BallInterface> _balls;
             private readonly Random _random = new Random();
+            public override int BoardWidth { get; }
+            public override int BoardHeight { get; }
 
-            public DataLayer()
+            public DataLayer(int w, int h)
             {
                 _balls = new List<BallInterface>();
+                BoardWidth = w;
+                BoardHeight = h;
             }
 
             public override int GetBallAmount()
@@ -68,8 +67,8 @@ namespace Data
                     Vector2 vel = new Vector2(velX, velY);
                     int diameter = _random.Next(15, 30);
                     int ballMass = diameter * 2;
-                    float ballX = (float)(_random.Next(20 + diameter, _boardWidth - diameter - 20) + _random.NextDouble());
-                    float ballY = (float)(_random.Next(20 + diameter, _boardHeight - diameter - 20) + _random.NextDouble());
+                    float ballX = (float)(_random.Next(15 + diameter, BoardWidth - diameter - 15) + _random.NextDouble());
+                    float ballY = (float)(_random.Next(15 + diameter, BoardHeight - diameter - 15) + _random.NextDouble());
 
                     BallData ball = new BallData(ballX, ballY, ballMass, vel, diameter, i);
                     _balls.Add(ball);

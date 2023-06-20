@@ -11,9 +11,9 @@ namespace Logic
     public abstract class LogicAbstractAPI 
                                              
     {
-        public static LogicAbstractAPI CreateLogicAPI(DataAbstractAPI? data = null)
+        public static LogicAbstractAPI CreateLogicAPI(int w, int h, DataAbstractAPI? data = null)
         {
-            return new LogicAPI(data);
+            return new LogicAPI(w, h, data);
         }
 
         public abstract void CreateBalls(int count);
@@ -21,34 +21,30 @@ namespace Logic
         public abstract int GetBallsAmount();
         public abstract int GetBallDiameterByID(int id);
         public abstract Vector2 GetBallPositionByID(int id);
-        
-        public abstract int GetBoardHeight();
-        public abstract int GetBoardWidth();
+
+        public abstract int BoardWidth { get; set; }
+        public abstract int BoardHeight { get; set; }
 
 
         public abstract event EventHandler<(int Id, float X, float Y, int Diameter)>? LogicEvent;
     }
     internal class LogicAPI : LogicAbstractAPI
     {
-        private readonly object _collisionLock = new();
+        private readonly object _lock = new();
         public override event EventHandler<(int Id, float X, float Y, int Diameter)>? LogicEvent;
         private ConcurrentDictionary<(int, int), bool> _collisionFlags = new ConcurrentDictionary<(int, int), bool>();
         DataAbstractAPI _dataAPI;
 
-        public LogicAPI(DataAbstractAPI? data)
+        public LogicAPI(int w, int h, DataAbstractAPI? data)
         {
-            _dataAPI = data != null ? data : DataAbstractAPI.CreateDataAPI();
+            BoardWidth = w;
+            BoardHeight = h;
+            _dataAPI = data != null ? data : DataAbstractAPI.CreateDataAPI(w, h);
         }
 
-        public override int GetBoardHeight()
-        {
-            return DataAbstractAPI.BoardHeight;
-        }
+        public override int BoardWidth { get; set; }
+        public override int BoardHeight { get; set; }
 
-        public override int GetBoardWidth()
-        {
-            return DataAbstractAPI.BoardWidth;
-        }
 
         public override int GetBallsAmount()
         {
@@ -71,7 +67,7 @@ namespace Logic
         {
             if (sender == null) return;
             BallInterface ball = (BallInterface)sender;
-            lock (_collisionLock)
+            lock (_lock)
             {
                 CheckBallCollision(ball);
             }
@@ -89,7 +85,7 @@ namespace Logic
             {
                 newVel.X = Math.Abs(ball.Velocity.X);
             }
-            else if (ball.Position.X + Radius >= GetBoardWidth())
+            else if (ball.Position.X + Radius >= BoardWidth)
             {
                 newVel.X = -Math.Abs(ball.Velocity.X);
             }
@@ -98,7 +94,7 @@ namespace Logic
             {
                 newVel.Y = Math.Abs(ball.Velocity.Y);
             }
-            else if (ball.Position.Y + Radius >= GetBoardHeight())
+            else if (ball.Position.Y + Radius >= BoardHeight)
             {
                 newVel.Y = -Math.Abs(ball.Velocity.Y);
 
