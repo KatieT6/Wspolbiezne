@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Data
 {
-    public class BallData : BallInterface
+    internal class BallData : BallInterface
     {
         private Task task;
         private bool move = true;
