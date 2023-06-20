@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Data;
 using Logic;
+using PesentationModel;
 
 namespace PresentationModel
 {
@@ -14,12 +15,11 @@ namespace PresentationModel
         {
             return new ModelAPI(logicAPI);
         }
-        public abstract void CallSimulation();
+
+        public abstract void AddBalls(int amount);
         public abstract void StopSimulation();
-        public abstract ObservableCollection<BallService> CreateBalls(int ballsNumber);
+        public ObservableCollection<BallModel> Balls { get; set; }
         public abstract int GetAmountOfBalls();
-
-
     }
     public class ModelAPI : ModelAbstractAPI
     {
@@ -32,28 +32,42 @@ namespace PresentationModel
         public ModelAPI(LogicAbstractAPI logicApi)
         {
             logicAPI = logicApi ?? LogicAbstractAPI.CreateLogicAPI();
+            Balls = new ObservableCollection<BallModel>();
+            logicAPI.LogicEvent += UpdateBall;
         }
 
-
-        public override void CallSimulation()
+        private void UpdateBall(object? sender, (int id, float x, float y, int diameter) args)
         {
-            logicAPI.RunSimulation();
+
+
+            if (args.id >= Balls.Count)
+            {
+                return;
+            }
+            Balls[args.id].Move(args.x - args.diameter / 2, args.y - args.diameter / 2);
+
         }
+
 
         public override void StopSimulation()
         {
-            logicAPI.StopSimulation();
-        }
-
-        public override ObservableCollection<BallService> CreateBalls(int ballsNumber)
-        {
-            logicAPI.CreateBalls(ballsNumber);
-            return logicAPI.Balls;
+            logicAPI.DeleteBalls();
+            Balls.Clear();
         }
 
         public override int GetAmountOfBalls()
         {
-            return logicAPI.Balls.Count;
+            return logicAPI.GetBallsAmount();
+        }
+
+        public override void AddBalls(int amount)
+        {
+            logicAPI.CreateBalls(amount);
+            for (int i = 0; i < amount; i++)
+            {
+                BallModel ballModel = new BallModel(logicAPI.GetBallPositionByID(i).X, logicAPI.GetBallPositionByID(i).Y, logicAPI.GetBallDiameterByID(i));
+                Balls.Add(ballModel);
+            }
         }
     }
 }

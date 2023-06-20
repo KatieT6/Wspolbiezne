@@ -36,7 +36,7 @@ namespace Data
         {
             get => position;
 
-            private set
+            set
             {
                 position = value;
             }
@@ -74,6 +74,11 @@ namespace Data
         // Id
 
         public int Id { get; }
+
+        // X i Y
+        public float X => position.X;
+
+        public float Y => position.Y;
 
         // Poruszanie sie kulki
 

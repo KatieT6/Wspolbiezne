@@ -22,6 +22,7 @@ namespace Data
         public abstract int GetBallAmount();
         public abstract BallInterface GetBallByID(int index);
         public abstract void CreateBalls(int count);
+        public abstract void RemoveBalls();
 
         //public abstract BallData GetBallData(Vector2 position, Vector2 velocity, float radius, float weight);
 
@@ -73,6 +74,15 @@ namespace Data
                     BallData ball = new BallData(ballX, ballY, ballMass, vel, diameter, i);
                     _balls.Add(ball);
                 }
+            }
+
+            public override void RemoveBalls()
+            {
+                foreach (BallInterface ball in _balls)
+                {
+                    ball.Dispose();
+                }
+                _balls.Clear();
             }
         }
     }

@@ -1,7 +1,9 @@
 ﻿using Data;
 using Logic;
+using PesentationModel;
 using PresentationModel;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -12,9 +14,10 @@ namespace PresentationViewModel
 
         private readonly ModelAbstractAPI modelAPI;
         private int _amountOfBalls;
-        private IList _balls;
+        /*private IList _balls;*/
         private readonly int _width;
         private readonly int _height;
+        public ObservableCollection<BallModel> BallsCollection { get; }
 
 
         public int AmountOfBalls { 
@@ -26,7 +29,7 @@ namespace PresentationViewModel
             } 
         }
 
-        public IList BallsList
+        /*public IList BallsList
         {
             get => _balls;
             set
@@ -34,7 +37,7 @@ namespace PresentationViewModel
                 _balls = value;
                 RaisePropertyChanged("BallsList");
             }
-        }
+        }*/
 
         public MyViewModel() : this(ModelAbstractAPI.CreateModelAPI()) { }
         public MyViewModel(ModelAbstractAPI modelAbstractAPI)
@@ -44,7 +47,7 @@ namespace PresentationViewModel
             _width = modelAPI.Width;
             ClickButton = new RelayCommand(OnClickButton);
             ExitClick = new RelayCommand(OnExitClick);
-
+            BallsCollection = modelAPI.Balls;
         }
 
         public ICommand ClickButton { get; set; }
@@ -56,13 +59,13 @@ namespace PresentationViewModel
 
         private void OnClickButton()
         {
-            BallsList = modelAPI.CreateBalls(_amountOfBalls);
-            modelAPI.CallSimulation();
+            modelAPI.AddBalls(AmountOfBalls);
         }
 
         private void OnExitClick()
         {
             modelAPI.StopSimulation();
+            BallsCollection.Clear();
         }
 
     }

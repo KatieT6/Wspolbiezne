@@ -10,9 +10,9 @@ using Microsoft.VisualBasic;
 
 namespace Logic
 {
-    public class BallService : INotifyPropertyChanged
+    public class BallService// : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
+       /* public event PropertyChangedEventHandler? PropertyChanged;
         private readonly BallData _ball;
         
 
@@ -78,7 +78,7 @@ namespace Logic
                     handler(this, new PropertyChangedEventArgs(propertyName));
                 }
             }
-        }
+        }*/
 
 
     }

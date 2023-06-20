@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Numerics;
 using System.Threading;
@@ -10,151 +11,33 @@ namespace Logic
     public abstract class LogicAbstractAPI 
                                              
     {
-        public static LogicAbstractAPI CreateLogicAPI()
+        public static LogicAbstractAPI CreateLogicAPI(DataAbstractAPI? data = null)
         {
-            return new LogicAPI();
+            return new LogicAPI(data);
         }
 
         public abstract void CreateBalls(int count);
         public abstract void DeleteBalls();
-        public abstract void RunSimulation();
-        public abstract void StopSimulation();
+        public abstract int GetBallsAmount();
+        public abstract int GetBallDiameterByID(int id);
+        public abstract Vector2 GetBallPositionByID(int id);
+        
         public abstract int GetBoardHeight();
         public abstract int GetBoardWidth();
-        public abstract ObservableCollection<BallService> Balls { get; }
+
+
+        public abstract event EventHandler<(int Id, float X, float Y, int Diameter)>? LogicEvent;
     }
     internal class LogicAPI : LogicAbstractAPI
     {
-        private List<Task> _tasks = new List<Task>();
-        private CancellationToken _cancelToken;
+        private readonly object _collisionLock = new();
+        public override event EventHandler<(int Id, float X, float Y, int Diameter)>? LogicEvent;
+        private ConcurrentDictionary<(int, int), bool> _collisionFlags = new ConcurrentDictionary<(int, int), bool>();
         DataAbstractAPI _dataAPI;
 
-        public override ObservableCollection<BallService> Balls { get; } = new ObservableCollection<BallService>();
-
-
-
-
-        public LogicAPI()
+        public LogicAPI(DataAbstractAPI? data)
         {
-            _dataAPI = DataAbstractAPI.CreateDataAPI();
-
-        }
-
-
-
-        public override void RunSimulation()
-        {
-
-            _cancelToken = CancellationToken.None;
-
-
-            foreach (BallService ballService in Balls)
-            {
-                Task task = Task.Run(
-                    () =>
-                {
-                    
-
-                    while (true)
-                    {
-                        Thread.Sleep(4);
-
-                        try
-                        {
-                            _cancelToken.ThrowIfCancellationRequested();
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            break;
-                        }
-
-                        ballService.UpdatePosition();
- 
-                    }
-                });
-
-                _tasks.Add(task);
-            }
-
-        }
-
-
-        public override void StopSimulation()
-        {
-            _cancelToken = new CancellationToken(true);
-
-            foreach (Task task in _tasks)
-            {
-                task.Wait();
-            }
-
-            _tasks.Clear();
-            Balls.Clear();
-        }
-
-        #region generateRandom
-
-        public static float GenerateRandomFloatInRange(Random random, float minValue, float maxValue)
-        {
-            return (float)(random.NextDouble() * (maxValue - minValue) + minValue);
-        }
-
-        public static Vector2 GenerateRandomVector2InRange(Random random, float minValue1, float maxValue1,
-            float minValue2, float maxValue2)
-        {
-            return (Vector2)(new Vector2(GenerateRandomFloatInRange(random, minValue1, maxValue1),
-                GenerateRandomFloatInRange(random, minValue2, maxValue2)));
-        }
-
-        #endregion
-
-        object _lock = new object();
-        public void BallLogic_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (sender == null) return;
-            BallService ballSender = (BallService)sender;
-            if (e.PropertyName == "X" || e.PropertyName == "Y")
-            {
-                lock (_lock)
-                {
-                    foreach (BallService otherBall in Balls)
-                    {
-                        if (ballSender.Equals(otherBall)) continue;
-                        if (ballSender.CollidesWith(otherBall))
-                            {
-                            ballSender.HandleCollision(otherBall);
-                            }
-                    }
-                    
-                }
-            }
-        }
-
-
-        
-
-
-        public override void CreateBalls(int count)
-        {
-            var rnd = new Random();
-
-            for (int i = 0; i < count; i++)
-            {
-                float speed = 0.0005f;
-                float radius = GenerateRandomFloatInRange(rnd, 10f, 30f);
-                Vector2 pos = GenerateRandomVector2InRange(rnd, 0, DataAbstractAPI.BoardWidth - radius, 0, DataAbstractAPI.BoardHeight - radius);
-                Vector2 vel = GenerateRandomVector2InRange(rnd, -speed, speed, -speed, speed);
-                BallData ballData = _dataAPI.GetBallData(pos, vel, radius, radius / 2);
-                BallService ballLogic = new BallService(ballData);
-
-                Balls.Add(ballLogic);
-                ballLogic.PropertyChanged += BallLogic_PropertyChanged;
-            }
-        }
-
-        public override void DeleteBalls()
-        {
-            Balls.Clear();
+            _dataAPI = data != null ? data : DataAbstractAPI.CreateDataAPI();
         }
 
         public override int GetBoardHeight()
@@ -166,5 +49,181 @@ namespace Logic
         {
             return DataAbstractAPI.BoardWidth;
         }
+
+        public override int GetBallsAmount()
+        {
+            return _dataAPI.GetBallAmount();
+        }
+
+        public override int GetBallDiameterByID(int id)
+        {
+            return _dataAPI.GetBallByID(id).Diameter;
+        }
+
+        public override Vector2 GetBallPositionByID(int id)
+        {
+            return _dataAPI.GetBallByID(id).Position;
+        }
+
+
+
+        public void BallPositionChanged(object? sender, EventArgs e)
+        {
+            if (sender == null) return;
+            BallInterface ball = (BallInterface)sender;
+            lock (_collisionLock)
+            {
+                CheckBallCollision(ball);
+            }
+            DetectWallCollision(ball);
+            LogicEvent?.Invoke(this, (ball.Id, ball.X, ball.Y, ball.Diameter));
+        }
+
+        #region Collisions checkers
+        private void DetectWallCollision(BallInterface ball)
+        {
+
+            Vector2 newVel = new Vector2(ball.Velocity.X, ball.Velocity.Y);
+            int Radius = ball.Diameter / 2;
+            if (ball.Position.X - Radius <= 0)
+            {
+                newVel.X = Math.Abs(ball.Velocity.X);
+            }
+            else if (ball.Position.X + Radius >= GetBoardWidth())
+            {
+                newVel.X = -Math.Abs(ball.Velocity.X);
+            }
+
+            if (ball.Position.Y - Radius <= 0)
+            {
+                newVel.Y = Math.Abs(ball.Velocity.Y);
+            }
+            else if (ball.Position.Y + Radius >= GetBoardHeight())
+            {
+                newVel.Y = -Math.Abs(ball.Velocity.Y);
+
+            }
+
+            ball.Velocity = newVel;
+        }
+
+
+        private void CheckBallCollision(BallInterface firstBall)
+        {
+            for (int i = 0; i < _dataAPI.GetBallAmount(); i++)
+            {
+
+                BallInterface secondBall = _dataAPI.GetBallByID(i);
+                if (firstBall == secondBall)
+                {
+                    continue;
+                }
+
+                if (!HasCollisionBeenChecked(secondBall, firstBall) && IsCollision(firstBall, secondBall))
+                {
+                    MarkCollisionAsChecked(firstBall, secondBall);
+
+
+                    Vector2 newFirstBallVel = NewVelocity(firstBall, secondBall);
+                    Vector2 newSecondBallVel = NewVelocity(secondBall, firstBall);
+                    if (Vector2.Distance(firstBall.Position, secondBall.Position) > Vector2.Distance(
+                        firstBall.Position + newFirstBallVel, secondBall.Position + newSecondBallVel))
+                    {
+                        return;
+                    }
+                    firstBall.Velocity = newFirstBallVel;
+                    secondBall.Velocity = newSecondBallVel;
+
+
+
+                }
+                else
+                {
+                    RemoveCollisionFromChecked(secondBall, firstBall);
+                }
+
+            }
+
+
+        }
+
+        #endregion
+
+        #region Helper methods
+        private Vector2 NewVelocity(BallInterface firstBall, BallInterface secondBall)
+        {
+            var ball1Vel = firstBall.Velocity;
+            var ball2Vel = secondBall.Velocity;
+            var distance = firstBall.Position - secondBall.Position;
+            return firstBall.Velocity -
+                   2.0f * secondBall.Mass / (firstBall.Mass + secondBall.Mass)
+                   * (Vector2.Dot(ball1Vel - ball2Vel, distance) * distance) /
+                   (float)Math.Pow(distance.Length(), 2);
+        }
+
+        private bool HasCollisionBeenChecked(BallInterface firstBall, BallInterface secondBall)
+        {
+            int id1 = firstBall.Id;
+            int id2 = secondBall.Id;
+            var key = (id1, id2);
+            return _collisionFlags.ContainsKey(key);
+        }
+
+        private bool IsCollision(BallInterface firstBall, BallInterface secondBall)
+        {
+            if (firstBall == null || secondBall == null)
+            {
+                return false;
+            }
+            float distance = Vector2.Distance(firstBall.Position, secondBall.Position);
+            return distance <= (firstBall.Diameter + secondBall.Diameter) / 2;
+        }
+
+
+
+
+       
+
+        private void MarkCollisionAsChecked(BallInterface firstBall, BallInterface secondBall)
+        {
+            int id1 = firstBall.Id;
+            int id2 = secondBall.Id;
+            var key = (id1, id2);
+            _collisionFlags.TryAdd(key, true);
+        }
+
+        private void RemoveCollisionFromChecked(BallInterface firstBall, BallInterface secondBall)
+        {
+            int id1 = firstBall.Id;
+            int id2 = secondBall.Id;
+            var key = (id1, id2);
+            _collisionFlags.Remove(key, out _);
+        }
+        #endregion
+
+        #region Ball methods
+        public override void CreateBalls(int count)
+        {
+            _dataAPI.CreateBalls(count);
+            for (int i = 0; i < count; i++)
+            {
+                _dataAPI.GetBallByID(i).BallChanged += BallPositionChanged;
+
+            }
+        }
+
+        public override void DeleteBalls()
+        {
+            for (int i = 0; i < _dataAPI.GetBallAmount(); i++)
+            {
+                _dataAPI.GetBallByID(i).BallChanged -= BallPositionChanged;
+
+            }
+            _dataAPI.RemoveBalls();
+        }
+
+        #endregion
+
+
     }
 }
