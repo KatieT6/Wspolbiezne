@@ -1,6 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
 using System.Numerics;
-using System.Threading;
 using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,63 +9,112 @@ namespace Logic.Tests
     public class LogicAbstractAPITests
     {
         [TestMethod]
-        public void CreateBalls_CreatesSpecifiedNumberOfBalls()
+        public void CreateLogicAPI_ShouldReturnInstanceOfLogicAPI()
         {
             // Arrange
-            LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI();
-            int ballCount = 5;
+            int width = 800;
+            int height = 600;
 
             // Act
-            logicAPI.CreateBalls(ballCount);
+            LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI(width, height);
 
             // Assert
-            Assert.AreEqual(ballCount, logicAPI.Balls.Count);
+            Assert.IsNotNull(logicAPI);
+            Assert.IsInstanceOfType(logicAPI, typeof(LogicAbstractAPI));
         }
 
         [TestMethod]
-        public void DeleteBalls_RemovesAllBalls()
+        public void CreateBalls_ShouldCreateSpecifiedNumberOfBalls()
         {
             // Arrange
-            LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI();
+            int width = 800;
+            int height = 600;
             int ballCount = 5;
+            LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI(width, height);
+
+            // Act
+            logicAPI.CreateBalls(ballCount);
+            int actualBallCount = logicAPI.GetBallsAmount();
+
+            // Assert
+            Assert.AreEqual(ballCount, actualBallCount);
+        }
+
+        [TestMethod]
+        public void DeleteBalls_ShouldRemoveAllBalls()
+        {
+            // Arrange
+            int width = 800;
+            int height = 600;
+            int ballCount = 5;
+            LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI(width, height);
             logicAPI.CreateBalls(ballCount);
 
             // Act
             logicAPI.DeleteBalls();
+            int actualBallCount = logicAPI.GetBallsAmount();
 
             // Assert
-            Assert.AreEqual(0, logicAPI.Balls.Count);
+            Assert.AreEqual(0, actualBallCount);
         }
 
         [TestMethod]
-        public void RunSimulation_StartsUpdatingBalls()
+        public void GetBallsAmount_ShouldReturnCorrectNumberOfBalls()
         {
             // Arrange
-            LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI();
+            int width = 800;
+            int height = 600;
             int ballCount = 5;
+            LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI(width, height);
             logicAPI.CreateBalls(ballCount);
-
-            
-            logicAPI.RunSimulation();
-
-            
-        }
-
-        [TestMethod]
-        public void StopSimulation_StopsUpdatingBalls()
-        {
-            // Arrange
-            LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI();
-            int ballCount = 5;
-            logicAPI.CreateBalls(ballCount);
-            logicAPI.RunSimulation();
 
             // Act
-            logicAPI.StopSimulation();
+            int actualBallCount = logicAPI.GetBallsAmount();
 
             // Assert
-            // Validate that the balls are no longer being updated (e.g., check their positions or velocities)
-            // Add appropriate assertions based on the expected behavior after stopping the simulation
+            Assert.AreEqual(ballCount, actualBallCount);
         }
+
+        [TestMethod]
+        public void GetBallDiameterByID_ShouldReturnCorrectDiameter()
+        {
+            // Arrange
+            int width = 800;
+            int height = 600;
+            int ballCount = 5;
+            LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI(width, height);
+            logicAPI.CreateBalls(ballCount);
+            int ballId = 2;
+            BallInterface ball = logicAPI.GetBallByID(ballId);
+            int expectedDiameter = ball.Diameter;
+
+            // Act
+            int actualDiameter = logicAPI.GetBallDiameterByID(ballId);
+
+            // Assert
+            Assert.AreEqual(expectedDiameter, actualDiameter);
+        }
+
+        [TestMethod]
+        public void GetBallPositionByID_ShouldReturnCorrectPosition()
+        {
+            // Arrange
+            int width = 800;
+            int height = 600;
+            int ballCount = 5;
+            LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI(width, height);
+            logicAPI.CreateBalls(ballCount);
+            int ballId = 2;
+            BallInterface ball = logicAPI.GetBallByID(ballId);
+            Vector2 expectedPosition = ball.Position;
+
+            // Act
+            Vector2 actualPosition = logicAPI.GetBallPositionByID(ballId);
+
+            // Assert
+            Assert.AreEqual(expectedPosition, actualPosition);
+        }
+
+        // Add more test methods as needed for the remaining functionality.
     }
 }
