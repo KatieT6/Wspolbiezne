@@ -19,10 +19,11 @@ namespace Logic
         public abstract void CreateBalls(int count);
         public abstract void DeleteBalls();
         public abstract int GetBallsAmount();
-
-        public abstract BallInterface GetBallByID(int id);
+        public abstract BallInterface GetBall(int id);
         public abstract int GetBallDiameterByID(int id);
         public abstract Vector2 GetBallPositionByID(int id);
+
+       
 
         public abstract int BoardWidth { get; set; }
         public abstract int BoardHeight { get; set; }
@@ -53,19 +54,20 @@ namespace Logic
             return _dataAPI.GetBallAmount();
         }
 
-        public override BallInterface GetBallByID(int id)
-        {
-            return _dataAPI.GetBallByID(id);
-        }
-
         public override int GetBallDiameterByID(int id)
         {
             return _dataAPI.GetBallByID(id).Diameter;
         }
 
+        public override BallInterface GetBall(int id)
+        {
+            return _dataAPI.GetBallByID((int)id);
+        }
+
         public override Vector2 GetBallPositionByID(int id)
         {
-            return _dataAPI.GetBallByID(id).Position;
+            BallInterface ball = _dataAPI.GetBallByID(id);
+            return ball.Position;
         }
 
 

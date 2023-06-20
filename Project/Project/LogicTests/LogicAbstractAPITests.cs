@@ -85,7 +85,7 @@ namespace Logic.Tests
             LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI(width, height);
             logicAPI.CreateBalls(ballCount);
             int ballId = 2;
-            BallInterface ball = logicAPI.GetBallByID(ballId);
+            BallInterface ball = logicAPI.GetBall(ballId);
             int expectedDiameter = ball.Diameter;
 
             // Act
@@ -105,7 +105,7 @@ namespace Logic.Tests
             LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI(width, height);
             logicAPI.CreateBalls(ballCount);
             int ballId = 2;
-            BallInterface ball = logicAPI.GetBallByID(ballId);
+            BallInterface ball = logicAPI.GetBall(ballId);
             Vector2 expectedPosition = ball.Position;
 
             // Act
