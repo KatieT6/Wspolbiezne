@@ -11,9 +11,6 @@ namespace Data
         Vector2 Position { get; set; }
         Vector2 Velocity { get; set; }
 
-        float X { get; }
-        float Y { get; }
-
         int Mass { get; }
 
         event EventHandler? BallChanged;

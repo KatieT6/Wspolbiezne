@@ -14,7 +14,6 @@ namespace PresentationViewModel
 
         private readonly ModelAbstractAPI modelAPI;
         private int _amountOfBalls;
-        /*private IList _balls;*/
         private readonly int _boardWidth = 750;
         private readonly int _boardHeight = 400;
         public ObservableCollection<BallModel> BallsCollection { get; }

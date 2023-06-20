@@ -85,7 +85,6 @@ namespace Data
                     ball.Dispose();
                 }
                 _balls.Clear();
-                logger.Dispose();
             }
         }
     }

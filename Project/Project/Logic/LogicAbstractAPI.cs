@@ -33,7 +33,7 @@ namespace Logic
     }
     internal class LogicAPI : LogicAbstractAPI
     {
-        private readonly object _lock = new();
+        private readonly object _lock = new object();
         public override event EventHandler<(int Id, float X, float Y, int Diameter)>? LogicEvent;
         private ConcurrentDictionary<(int, int), bool> _collisionFlags = new ConcurrentDictionary<(int, int), bool>();
         DataAbstractAPI _dataAPI;
@@ -48,6 +48,7 @@ namespace Logic
         public override int BoardWidth { get; set; }
         public override int BoardHeight { get; set; }
 
+        #region Getters
 
         public override int GetBallsAmount()
         {
@@ -70,9 +71,9 @@ namespace Logic
             return ball.Position;
         }
 
+        #endregion
 
-
-
+        #region Position changed
         public void BallPositionChanged(object? sender, EventArgs e)
         {
             if (sender == null) return;
@@ -82,8 +83,9 @@ namespace Logic
                 CheckBallCollision(ball);
             }
             DetectWallCollision(ball);
-            LogicEvent?.Invoke(this, (ball.Id, ball.X, ball.Y, ball.Diameter));
+            LogicEvent?.Invoke(this, (ball.Id, ball.Position.X, ball.Position.Y, ball.Diameter));
         }
+        #endregion
 
         #region Collisions checkers
         private void DetectWallCollision(BallInterface ball)
@@ -116,6 +118,7 @@ namespace Logic
 
         private void CheckBallCollision(BallInterface firstBall)
         {
+
             for (int i = 0; i < _dataAPI.GetBallAmount(); i++)
             {
 
@@ -185,10 +188,6 @@ namespace Logic
             return distance <= (firstBall.Diameter + secondBall.Diameter) / 2;
         }
 
-
-
-
-       
 
         private void MarkCollisionAsChecked(BallInterface firstBall, BallInterface secondBall)
         {
