@@ -24,8 +24,6 @@ namespace Data
         public abstract void CreateBalls(int count);
         public abstract void RemoveBalls();
 
-        //public abstract BallData GetBallData(Vector2 position, Vector2 velocity, float radius, float weight);
-
 
         internal class DataLayer : DataAbstractAPI
         {
