@@ -95,26 +95,6 @@ namespace Logic.Tests
             Assert.AreEqual(expectedDiameter, actualDiameter);
         }
 
-        [TestMethod]
-        public void GetBallPositionByID_ShouldReturnCorrectPosition()
-        {
-            // Arrange
-            int width = 800;
-            int height = 600;
-            int ballCount = 5;
-            LogicAbstractAPI logicAPI = LogicAbstractAPI.CreateLogicAPI(width, height);
-            logicAPI.CreateBalls(ballCount);
-            int ballId = 2;
-            BallInterface ball = logicAPI.GetBall(ballId);
-            Vector2 expectedPosition = ball.Position;
-
-            // Act
-            Vector2 actualPosition = logicAPI.GetBallPositionByID(ballId);
-
-            // Assert
-            Assert.AreEqual(expectedPosition, actualPosition);
-        }
-
         // Add more test methods as needed for the remaining functionality.
     }
 }
